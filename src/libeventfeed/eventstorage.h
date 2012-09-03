@@ -56,5 +56,9 @@ public slots:
 private:
     QString m_dbname;
     QSqlDatabase m_db;
+
+private slots:
+    void reset();
+    bool isSchemaValid();
 };
 #endif

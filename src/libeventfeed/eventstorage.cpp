@@ -61,69 +61,8 @@ void EventStorage::open()
         qFatal("Can't create directory for database files.");
     }
 
-    // TODO: refactor the rest of the method!!!
-    if (!m_db.open()) { // Wrong format? Let's try to re-create it
-
-        if (!QFile::exists(m_dbname)) {
-            qFatal("Can't create events db file");
-        } else if (!QFile::remove(m_dbname)) {
-            qFatal("Can't delete existing events db file");
-        }
-
-        if (!m_db.open()) {
-            qFatal("Can't re-create events db file");
-        }
-    }
-
-    bool success = true;
-
-    success = QSqlQuery().exec(
-            "CREATE TABLE IF NOT EXISTS events ("
-                "id INTEGER PRIMARY KEY, "
-                "title TEXT, body TEXT, "
-                "timestamp TEXT, footer TEXT, "
-                "action TEXT, url TEXT, "
-                "sourceName TEXT, "
-                "sourceDisplayName TEXT)");
-    success = success && QSqlQuery().exec(
-            "CREATE TABLE IF NOT EXISTS images ("
-                "id INTEGER, position INTEGER, "
-                "originalPath TEXT, thumbnailPath TEXT, "
-                "type TEXT, PRIMARY KEY(id, position))");
-
-
-    if (!success) {
-        m_db.close();
-
-        if (!QFile::exists(m_dbname)) {
-            qFatal("Can't create events db file");
-        } else if (!QFile::remove(m_dbname)) {
-            qFatal("Can't delete existing events db file");
-        }
-
-        if (!m_db.open()) {
-            qFatal("Can't re-create events db file");
-        }
-        success = true;
-
-        success = QSqlQuery().exec(
-                "CREATE TABLE IF NOT EXISTS events ("
-                    "id INTEGER PRIMARY KEY, "
-                    "title TEXT, body TEXT, "
-                    "timestamp TEXT, footer TEXT, "
-                    "action TEXT, url TEXT, "
-                    "sourceName TEXT, "
-                    "sourceDisplayName TEXT)");
-        success = success && QSqlQuery().exec(
-                "CREATE TABLE IF NOT EXISTS images ("
-                    "id INTEGER, position INTEGER, "
-                    "originalPath TEXT, thumbnailPath TEXT, "
-                    "type TEXT, PRIMARY KEY(id, position))");
-
-    }
-
-    if (!success) {
-        qFatal("Can't open events database.");
+    if (!m_db.open() || !isSchemaValid()) {
+        reset();
     }
 }
 
@@ -278,4 +217,41 @@ void EventStorage::saveThumbnail(const qlonglong &id, const int &position,
     query.bindValue(":id", id);
     query.bindValue(":position", position);
     query.exec();
+}
+
+void EventStorage::reset()
+{
+    if (QFile::exists(m_dbname)) {
+        if (!QFile::remove(m_dbname)) {
+            qFatal("Can't delete existing events db file");
+        }
+    }
+
+    if (!m_db.open()) {
+        qFatal("Can't create events db file");
+    }
+
+    bool ret;
+    ret = QSqlQuery().exec(
+            "CREATE TABLE events ("
+                "id INTEGER PRIMARY KEY, "
+                "title TEXT, body TEXT, "
+                "timestamp TEXT, footer TEXT, "
+                "action TEXT, url TEXT, "
+                "sourceName TEXT, "
+                "sourceDisplayName TEXT)");
+    ret = ret && QSqlQuery().exec(
+            "CREATE TABLE images ("
+                "id INTEGER, position INTEGER, "
+                "originalPath TEXT, thumbnailPath TEXT, "
+                "type TEXT, PRIMARY KEY(id, position))");
+    if (!ret) {
+        qFatal("Can't create db schema");
+    }
+}
+
+bool EventStorage::isSchemaValid()
+{
+    return QSqlQuery().exec("SELECT count(*) FROM events");
+    // TODO: keep the number of events less than 250
 }
