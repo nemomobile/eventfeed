@@ -10,11 +10,14 @@ The eventfeed package provides
   - sending requests to a thumbnailer service,
   - emitting signals upon adding or removal events from the storage.
 
-2. trivial wrapper library around a proxy to
+2. trivial wrapper library (libmeegotouchevents) around a proxy to
    `org.nemomobile.events.EventFeed`. This library serves as public API.
 
 3. QtQuick component listening to signals from the D-Bus service and
    updating component's view.
+
+4. `libeventfeed` used by `eventfeedd` and by the QtQuick component
+   to deal with event storage.
 
 In order to decrease startup time the QtQuick components initializes its
 view by loading event items from the storage directly.
