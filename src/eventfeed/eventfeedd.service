@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.nemomobile.events.EventFeed
+Exec=/usr/bin/eventfeedd

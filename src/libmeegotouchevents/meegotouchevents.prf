@@ -1,0 +1,2 @@
+INCLUDEPATH += /usr/include/meegotouchevents
+LIBS += -lmeegotouchevents

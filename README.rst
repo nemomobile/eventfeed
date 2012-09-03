@@ -1,0 +1,48 @@
+Overview
+========
+
+The eventfeed package provides
+
+1. `eventfeedd` daemon which is responsible for:
+
+  - registering the D-Bus service `org.nemomobile.events.EventFeed`,
+  - event storage maintenance,
+  - sending requests to a thumbnailer service,
+  - emitting signals upon adding or removal events from the storage.
+
+2. trivial wrapper library around a proxy to
+   `org.nemomobile.events.EventFeed`. This library serves as public API.
+
+3. QtQuick component listening to signals from the D-Bus service and
+   updating component's view.
+
+In order to decrease startup time the QtQuick components initializes its
+view by loading event items from the storage directly.
+
+Event storage
+=============
+
+`eventfeed` uses SQLite database as a storage for event items. Its schema is
+identical to what's been used in MeeGo Harmattan::
+
+  CREATE TABLE events (id INTEGER PRIMARY KEY, title TEXT, body TEXT,
+                       timestamp TEXT, footer TEXT, action TEXT, url TEXT,
+                       sourceName TEXT, sourceDisplayName TEXT);
+  CREATE TABLE images (id INTEGER, position INTEGER, originalPath TEXT,
+                       thumbnailPath TEXT, type TEXT,
+                       PRIMARY KEY(id, position));
+
+Notes
+=====
+
+Currently there is no working thumbnailer service in Nemo thus the code
+using the libthumbnailer API is useless. The QtQuick component ignores
+the content of the thumbnailPath field and uses the thumbnailer plugin
+from the package `nemo-qml-plugins`.
+
+If we decide not to use any D-Bus based thumbnailer, but to rely on the
+QML plugin then this separate daemon providing
+`org.nemomobile.events.EventFeed` service may be considered an
+overcomplication. Instead the service might be a part of the QtQuick
+component and the API library might be rewritten to update the
+event storage directly.
