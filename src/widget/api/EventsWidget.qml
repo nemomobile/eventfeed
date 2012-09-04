@@ -73,6 +73,7 @@ ListView {
                 deleteAllButton.itemDisplayType = sourceDisplayName;
                 eventMenu.open();
             }
+            onClicked: Qt.openUrlExternally(url)
         }
     }
 

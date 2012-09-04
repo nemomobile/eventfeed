@@ -49,6 +49,8 @@ public:
         ImageListRole,
         TimestampRole,
         FooterRole,
+        VideoRole,
+        UrlRole,
         SourceNameRole,
         SourceDisplayNameRole
     };

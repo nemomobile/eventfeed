@@ -47,6 +47,8 @@ EventModel::EventModel(QObject *parent)
     roles[ImageListRole]         = "imageList";
     roles[TimestampRole]         = "timestamp";
     roles[FooterRole]            = "footer";
+    roles[VideoRole]             = "video";
+    roles[UrlRole]               = "url";
     roles[SourceNameRole]        = "sourceName";
     roles[SourceDisplayNameRole] = "sourceDisplayName";
     setRoleNames(roles);
@@ -105,6 +107,10 @@ QVariant EventModel::data(const QModelIndex &index, int role) const
             return event->timestamp();
         case FooterRole:
             return event->footer();
+        case VideoRole:
+            return event->video();
+        case UrlRole:
+            return event->url();
         case SourceNameRole:
             return event->sourceName();
         case SourceDisplayNameRole:
