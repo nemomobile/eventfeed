@@ -63,11 +63,7 @@ Event::Event(const qlonglong &eid,
 
 const QString Event::icon() const
 {
-    if (!m_icon.isEmpty() && !m_icon.startsWith("/")) {
-        return "image://theme/" + m_icon;
-    } else {
-        return m_iconThumbnail;
-    }
+    return m_icon;
 }
 
 const QString Event::title() const

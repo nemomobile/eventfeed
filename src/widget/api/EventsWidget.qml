@@ -9,12 +9,19 @@ ListView {
     id: eventsView
     model: events
     height: 800
+    cacheBuffer: 10
+    spacing: 30
 
     delegate: Item {
         anchors { left: parent.left; right: parent.right }
-        height: 250
+        height: 40 + bodyText.height + imageListView.height
         Image {
-            source: icon
+            anchors { left: parent.left; leftMargin: 10 }
+            height: 80
+            width: 80
+            sourceSize.width: 80
+            sourceSize.height: 80
+            source: icon.indexOf("/") == 0 ? "image://nemoThumbnail/" + icon : "image://theme/" + icon;
         }
         Column {
             anchors { left: parent.left; right: parent.right }
@@ -26,10 +33,25 @@ ListView {
                 font.pixelSize: 16
             }
             Text {
+                id: bodyText
                 anchors { left: parent.left; right: parent.right; leftMargin: 100; rightMargin: 20 }
                 text: body
                 wrapMode: Text.WordWrap
                 font.pixelSize: 16
+            }
+            ListView {
+                id: imageListView
+                model: imageList
+                anchors { left: parent.left; right: parent.right; leftMargin: 100; }
+                height: 200 * imageList.length
+                delegate: Image {
+                    anchors { left: parent.left }
+                    height: 200
+                    width: 200
+                    sourceSize.width: 200
+                    sourceSize.height: 200
+                    source: "image://nemoThumbnail/" + modelData
+                }
             }
             Row {
                 spacing: 5
@@ -47,21 +69,6 @@ ListView {
                 Text {
                     text: footer
                     font.pixelSize: 12
-                }
-            }
-            ListView {
-                id: imageListView
-                model: imageList
-                anchors { left: parent.left; right: parent.right }
-                height: 50
-                delegate: Item {
-                    anchors { left: parent.left; right: parent.right }
-                    height: 50
-                    Image {
-                        sourceSize.width: 50
-                        sourceSize.height: 50
-                        source: "image://nemoThumbnail/" + modelData
-                    }
                 }
             }
         }
