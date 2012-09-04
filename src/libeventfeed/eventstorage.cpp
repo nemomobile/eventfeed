@@ -77,6 +77,8 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
     qlonglong id;
     QString icon = parameters["icon"].toString();
 
+    purgeOutdatedItems();
+
     m_db.transaction();
     query.prepare("INSERT INTO events (title, body, timestamp, footer, url, "
                                       "sourceName, sourceDisplayName) "
@@ -122,6 +124,8 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
     }
     m_db.commit();
 
+    m_itemCount++;
+
     return id;
 }
 
@@ -132,6 +136,7 @@ bool EventStorage::removeItem(const qlonglong &id)
     query.bindValue(":id", id);
     query.exec();
     if (query.numRowsAffected() > 0) {
+        m_itemCount--;
         query.prepare("DELETE FROM images WHERE id = :id");
         query.bindValue(":id", id);
         query.exec();
@@ -160,6 +165,7 @@ const QList<qlonglong> EventStorage::removeItemsBySourceName(const QString &sour
     query.bindValue(":sourceName", sourceName);
     query.exec();
     m_db.commit();
+    m_itemCount -= ids.size();
     return ids;
 }
 
@@ -248,10 +254,40 @@ void EventStorage::reset()
     if (!ret) {
         qFatal("Can't create db schema");
     }
+    m_itemCount = 0;
 }
 
 bool EventStorage::isSchemaValid()
 {
-    return QSqlQuery().exec("SELECT count(*) FROM events");
-    // TODO: keep the number of events less than 250
+    QSqlQuery query;
+    if (!query.exec("SELECT count(*) FROM events")) {
+        return false;
+    }
+    // FIXME: this method should be free of side effects
+    //        next two line semantically belong to instance initialization
+    query.next();
+    m_itemCount = query.value(0).toLongLong();
+
+    return true;
+}
+
+void EventStorage::purgeOutdatedItems()
+{
+    QList<qlonglong> ids;
+
+    if (m_itemCount > MAX_EVENT_ITEMS) {
+        QSqlQuery query;
+        m_db.transaction();
+        query.exec("SELECT id FROM events ORDER BY timestamp ASC, id ASC LIMIT "
+                    STR(EVENT_COUNT_HYSTERESIS));
+        while (query.next()) {
+            ids.append(query.value(0).toLongLong());
+        }
+        query.exec("DELETE FROM events WHERE id IN "
+                        "(SELECT id FROM events ORDER BY timestamp ASC, id ASC LIMIT "
+                          STR(EVENT_COUNT_HYSTERESIS) ")");
+        m_db.commit();
+        m_itemCount -= ids.size();
+        emit itemsOutdated(ids);
+    }
 }

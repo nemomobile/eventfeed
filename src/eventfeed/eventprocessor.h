@@ -153,6 +153,12 @@ private slots:
     void error(const QString &error, const QUrl &uri) {
         qCritical() << __FILE__ << __LINE__ << m_event["id"] << uri << error;
 
+        // For some reason this slot is called twice for the same error if
+        // the Thumbnailer1 service is unavailable.
+        if (m_imgpos.empty()) {
+            return;
+        }
+
         QString origFile = uri.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
         m_imgpos.remove(origFile);
 

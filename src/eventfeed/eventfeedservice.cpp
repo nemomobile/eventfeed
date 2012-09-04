@@ -40,7 +40,11 @@ EventFeedService::EventFeedService(QObject *parent)
     m_thumbnailer(NULL)
 {
     m_thumbnailer = new Thumbnails::Thumbnailer();
+
     m_storage.open();
+    connect(&m_storage, SIGNAL(itemsOutdated(const QList<qlonglong>&)),
+            this, SIGNAL(eventsRemoved(const QList<qlonglong>&)));
+
     m_timer.setInterval(20000);
     m_timer.setSingleShot(true);
     connect(&m_timer, SIGNAL(timeout()), this, SIGNAL(idle()));
@@ -78,6 +82,7 @@ qlonglong EventFeedService::addItem(const QVariantMap &parameters)
         m_timer.start();
         return id;
     }
+    // the processor will commit suicide and deallocate its memory when the event is ready
     connect(processor, SIGNAL(eventReady(QVariantMap)),
             this, SIGNAL(eventAdded(QVariantMap)));
 

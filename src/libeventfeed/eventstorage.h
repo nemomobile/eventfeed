@@ -36,6 +36,12 @@
 #include <QtSql>
 #include "event.h"
 
+#define STR_EXPAND(tok) #tok
+#define STR(tok) STR_EXPAND(tok)
+
+#define MAX_EVENT_ITEMS 250
+#define EVENT_COUNT_HYSTERESIS 20
+
 class EventStorage : public QObject
 {
     Q_OBJECT
@@ -53,12 +59,17 @@ public slots:
     void saveThumbnail(const qlonglong &id, const int &position,
                        const QString &image);
 
+signals:
+    void itemsOutdated(const QList<qlonglong>& ids);
+
 private:
     QString m_dbname;
     QSqlDatabase m_db;
+    qlonglong m_itemCount;
 
 private slots:
     void reset();
     bool isSchemaValid();
+    void purgeOutdatedItems();
 };
 #endif
