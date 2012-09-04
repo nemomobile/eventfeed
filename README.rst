@@ -49,3 +49,5 @@ QML plugin then this separate daemon providing
 overcomplication. Instead the service might be a part of the QtQuick
 component and the API library might be rewritten to update the
 event storage directly.
+
+The field `events.action` seems to be redundant.
