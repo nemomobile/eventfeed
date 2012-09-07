@@ -54,7 +54,7 @@ So instead of::
 
                                                         --> event model 1
                                                         v
-  client -> dump library -> dbus -> event service -> dbus <-> event model 2
+  client -> dumb library -> dbus -> event service -> dbus <-> event model 2
                                                         ^
                                                         ---> event model 3
 
