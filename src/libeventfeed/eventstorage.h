@@ -41,6 +41,7 @@
 
 #define MAX_EVENT_ITEMS 250
 #define EVENT_COUNT_HYSTERESIS 20
+#define DB_SCHEMA_VERSION 1
 
 class EventStorage : public QObject
 {

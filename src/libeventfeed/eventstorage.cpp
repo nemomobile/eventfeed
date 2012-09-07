@@ -63,6 +63,15 @@ void EventStorage::open()
 
     if (!m_db.open() || !isSchemaValid()) {
         reset();
+    } else {
+        QSqlQuery query;
+
+        if (!query.exec("SELECT count(*) FROM events")) {
+            qFatal("Wrong DB schema");
+        }
+    
+        query.next();
+        m_itemCount = query.value(0).toLongLong();
     }
 }
 
@@ -251,6 +260,7 @@ void EventStorage::reset()
                 "id INTEGER, position INTEGER, "
                 "originalPath TEXT, thumbnailPath TEXT, "
                 "type TEXT, PRIMARY KEY(id, position))");
+    ret = ret && QSqlQuery().exec("PRAGMA user_version=" STR(DB_SCHEMA_VERSION));
     if (!ret) {
         qFatal("Can't create db schema");
     }
@@ -260,13 +270,14 @@ void EventStorage::reset()
 bool EventStorage::isSchemaValid()
 {
     QSqlQuery query;
-    if (!query.exec("SELECT count(*) FROM events")) {
+
+    if (!query.exec("PRAGMA user_version")) {
         return false;
     }
-    // FIXME: this method should be free of side effects
-    //        next two line semantically belong to instance initialization
     query.next();
-    m_itemCount = query.value(0).toLongLong();
+    if (query.value(0).toLongLong() != DB_SCHEMA_VERSION) {
+        return false;
+    }
 
     return true;
 }
