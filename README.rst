@@ -50,4 +50,23 @@ overcomplication. Instead the service might be a part of the QtQuick
 component and the API library might be rewritten to update the
 event storage directly.
 
+So instead of::
+
+                                                        --> event model 1
+                                                        v
+  client -> dump library -> dbus -> event service -> dbus <-> event model 2
+                                                        ^
+                                                        ---> event model 3
+
+the scheme might look like this::
+
+  client -> smart library -> dbus -> single event model
+
+OTOH if go this way then
+
+1. event feed bindings for other programming languages will get complicated,
+
+2. changes in one event view won't be reflected in all others given that
+   we want to allow running many event veiws in different processes at once.
+
 The field `events.action` seems to be redundant.
