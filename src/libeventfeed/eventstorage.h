@@ -41,7 +41,7 @@
 
 #define MAX_EVENT_ITEMS 250
 #define EVENT_COUNT_HYSTERESIS 20
-#define DB_SCHEMA_VERSION 1
+#define DB_SCHEMA_VERSION 2
 
 class EventStorage : public QObject
 {
@@ -57,8 +57,6 @@ public slots:
     bool removeItem(const qlonglong &id);
     const QList<qlonglong> removeItemsBySourceName(const QString &sourceName);
     QList<Event *> getAllItems();
-    void saveThumbnail(const qlonglong &id, const int &position,
-                       const QString &image);
 
 signals:
     void itemsOutdated(const QList<qlonglong>& ids);

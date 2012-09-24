@@ -42,9 +42,7 @@ Event::Event(const qlonglong &eid,
              const bool &video,
              const QString &url,
              const QString &sourceName,
-             const QString &sourceDisplayName,
-             const QString &iconThumbnail,
-             const QStringList &thumbnailList)
+             const QString &sourceDisplayName)
     : id(eid),
       m_icon(icon),
       m_title(title),
@@ -55,9 +53,7 @@ Event::Event(const qlonglong &eid,
       m_video(video),
       m_url(url),
       m_sourceName(sourceName),
-      m_sourceDisplayName(sourceDisplayName),
-      m_iconThumbnail(iconThumbnail),
-      m_thumbnailList(thumbnailList)
+      m_sourceDisplayName(sourceDisplayName)
 {
 }
 

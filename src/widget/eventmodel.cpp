@@ -131,9 +131,7 @@ void EventModel::addEvent(const QVariantMap &ev)
                              ev["video"].toBool(),
                              ev["url"].toString(),
                              ev["sourceName"].toString(),
-                             ev["sourceDisplayName"].toString(),
-                             ev["iconThumbnail"].toString(),
-                             ev["thumbnailList"].toStringList());
+                             ev["sourceDisplayName"].toString());
     beginInsertRows(QModelIndex(), 0, 0);
     m_events.prepend(event);
     endInsertRows();

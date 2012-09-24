@@ -49,9 +49,7 @@ public:
           const bool &video,
           const QString &url,
           const QString &sourceName,
-          const QString &sourceDisplayName,
-          const QString &iconThumbnail,
-          const QStringList &thumbnailList);
+          const QString &sourceDisplayName);
 
     const qlonglong id;
 
@@ -77,8 +75,6 @@ private:
     QString     m_url;
     QString     m_sourceName;
     QString     m_sourceDisplayName;
-    QString     m_iconThumbnail;
-    QStringList m_thumbnailList;
 };
 
 #endif /* EVENT_H */

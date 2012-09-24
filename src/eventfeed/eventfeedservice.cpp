@@ -33,14 +33,10 @@
 #include <QDBusConnection>
 #include "eventfeedservice.h"
 #include "eventfeedadaptor.h"
-#include "eventprocessor.h"
 
 EventFeedService::EventFeedService(QObject *parent)
-  : QObject(parent),
-    m_thumbnailer(NULL)
+  : QObject(parent)
 {
-    m_thumbnailer = new Thumbnails::Thumbnailer();
-
     m_storage.open();
     connect(&m_storage, SIGNAL(itemsOutdated(const QList<qlonglong>&)),
             this, SIGNAL(eventsRemoved(const QList<qlonglong>&)));
@@ -64,27 +60,17 @@ EventFeedService::EventFeedService(QObject *parent)
 EventFeedService::~EventFeedService()
 {
     m_storage.close();
-    delete m_thumbnailer;
 }
 
 qlonglong EventFeedService::addItem(const QVariantMap &parameters)
 {
     qlonglong id;
+    QVariantMap event_params = parameters;
     m_timer.stop();
 
     id = m_storage.addItem(parameters);
-    EventProcessor *processor = new EventProcessor(id, parameters, this);
-    connect(processor, SIGNAL(thumbnailReady(const qlonglong&, const int&, const QString&)),
-            &m_storage, SLOT(saveThumbnail(const qlonglong&, const int&, const QString&)));
-    if (processor->process(m_thumbnailer)) {
-        emit eventAdded(processor->getEventData());
-        processor->deleteLater();
-        m_timer.start();
-        return id;
-    }
-    // the processor will commit suicide and deallocate its memory when the event is ready
-    connect(processor, SIGNAL(eventReady(QVariantMap)),
-            this, SIGNAL(eventAdded(QVariantMap)));
+    event_params["id"] = id;
+    emit eventAdded(event_params);
 
     m_timer.start();
     return id;

@@ -13,15 +13,14 @@ system(qdbusxml2cpp -c EventFeedAdaptor -a eventfeedadaptor ../../org.nemomobile
 QT += dbus sql
 
 HEADERS = eventfeedservice.h \
-          eventfeedadaptor.h \
-          eventprocessor.h
+          eventfeedadaptor.h
 
 SOURCES = eventfeedservice.cpp \
           eventfeedadaptor.cpp \
           main.cpp
 
 INCLUDEPATH += ../libeventfeed
-LIBS += -L../libeventfeed -leventfeed -lthumbnailer
+LIBS += -L../libeventfeed -leventfeed
 
 services.files = *.service
 services.path = $$INSTALL_ROOT$$PREFIX/share/dbus-1/services

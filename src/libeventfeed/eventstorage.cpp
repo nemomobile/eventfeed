@@ -184,7 +184,7 @@ QList<Event *> EventStorage::getAllItems()
     QSqlQuery query, query_img;
     query.exec("SELECT e.id, e.title, e.body, e.timestamp, e.footer, "
                       "e.url, e.sourceName, e.sourceDisplayName, "
-                      "i.originalPath, i.thumbnailPath FROM events e "
+                      "i.originalPath FROM events e "
                "LEFT OUTER JOIN images i ON i.id = e.id AND "
                                            "i.position = -1 "
                "ORDER BY e.timestamp DESC, e.id DESC");
@@ -198,40 +198,24 @@ QList<Event *> EventStorage::getAllItems()
         QString sourceName = query.value(6).toString();
         QString sourceDisplayName = query.value(7).toString();
         QString icon = query.value(8).toString();
-        QString iconThumbnail = query.value(9).toString();
 
         // TODO: try to reduce the amount of SQL queries
-        query_img.prepare("SELECT originalPath, thumbnailPath FROM images "
+        query_img.prepare("SELECT originalPath FROM images "
                           "WHERE id = :id AND position >= 0 "
                           "ORDER BY position ASC");
         query_img.bindValue(":id", id);
         query_img.exec();
-        QStringList images, thumbnails;
+        QStringList images;
         while (query_img.next()) {
             images.append(query_img.value(0).toString());
-            thumbnails.append(query_img.value(1).toString());
         }
 
         Event* event = new Event(id, icon, title, body, images,
                                  timestamp, footer, false, url, sourceName,
-                                 sourceDisplayName, iconThumbnail,
-                                 thumbnails);
+                                 sourceDisplayName);
         events.append(event);
     }
     return events;
-}
-
-void EventStorage::saveThumbnail(const qlonglong &id, const int &position,
-                                 const QString &image)
-{
-    qDebug() << __FILE__ << __LINE__ << "updating " << id << position << image;
-    QSqlQuery query;
-    query.prepare("UPDATE images SET thumbnailPath = :path"
-                  "WHERE id = :id AND " "position = :position");
-    query.bindValue(":path", image);
-    query.bindValue(":id", id);
-    query.bindValue(":position", position);
-    query.exec();
 }
 
 void EventStorage::reset()
@@ -258,7 +242,7 @@ void EventStorage::reset()
     ret = ret && QSqlQuery().exec(
             "CREATE TABLE images ("
                 "id INTEGER, position INTEGER, "
-                "originalPath TEXT, thumbnailPath TEXT, "
+                "originalPath TEXT, "
                 "type TEXT, PRIMARY KEY(id, position))");
     ret = ret && QSqlQuery().exec("PRAGMA user_version=" STR(DB_SCHEMA_VERSION));
     if (!ret) {

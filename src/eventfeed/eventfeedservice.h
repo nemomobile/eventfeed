@@ -38,7 +38,6 @@
 #include <QtCore/QString>
 #include <QtCore/QVariant>
 #include <eventstorage.h>
-#include <thumbnailer/Thumbnailer>
 
 class EventFeedService : public QObject
 {
@@ -60,7 +59,6 @@ Q_SIGNALS: // SIGNALS
 private:
     EventStorage m_storage;
     QTimer m_timer;
-    Thumbnails::Thumbnailer *m_thumbnailer;
 };
 
 #endif
