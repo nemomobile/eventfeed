@@ -7,7 +7,6 @@ The eventfeed package provides
 
   - registering the D-Bus service `org.nemomobile.events.EventFeed`,
   - event storage maintenance,
-  - sending requests to a thumbnailer service,
   - emitting signals upon adding or removal events from the storage.
 
 2. trivial wrapper library (libmeegotouchevents) around a proxy to
@@ -26,22 +25,16 @@ Event storage
 =============
 
 `eventfeed` uses SQLite database as a storage for event items. Its schema is
-identical to what's been used in MeeGo Harmattan::
+very similar to what's been used in MeeGo Harmattan::
 
   CREATE TABLE events (id INTEGER PRIMARY KEY, title TEXT, body TEXT,
                        timestamp TEXT, footer TEXT, action TEXT, url TEXT,
                        sourceName TEXT, sourceDisplayName TEXT);
   CREATE TABLE images (id INTEGER, position INTEGER, originalPath TEXT,
-                       thumbnailPath TEXT, type TEXT,
-                       PRIMARY KEY(id, position));
+                       type TEXT, PRIMARY KEY(id, position));
 
 Notes
 =====
-
-Currently there is no working thumbnailer service in Nemo thus the code
-using the libthumbnailer API is useless. The QtQuick component ignores
-the content of the thumbnailPath field and uses the thumbnailer plugin
-from the package `nemo-qml-plugins`.
 
 If we decide not to use any D-Bus based thumbnailer, but to rely on the
 QML plugin then this separate daemon providing
