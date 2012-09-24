@@ -166,11 +166,11 @@ const QList<qlonglong> EventStorage::removeItemsBySourceName(const QString &sour
     while (query.next()) {
         ids.append(query.value(0).toLongLong());
     }
-    query.prepare("DELETE FROM events WHERE sourceName = :sourceName");
-    query.bindValue(":sourceName", sourceName);
-    query.exec();
     query.prepare("DELETE FROM images WHERE id IN "
                     "(SELECT id FROM events WHERE sourceName = :sourceName)");
+    query.bindValue(":sourceName", sourceName);
+    query.exec();
+    query.prepare("DELETE FROM events WHERE sourceName = :sourceName");
     query.bindValue(":sourceName", sourceName);
     query.exec();
     m_db.commit();
