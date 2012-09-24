@@ -31,8 +31,6 @@
  */
 
 #include "feeder.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 Feeder::Feeder()
 {
@@ -53,7 +51,7 @@ void Feeder::newfeed()
                            QUrl("http://www.engadget.com/2012/05/07/mastercard-introduces-paypass-wallet-services-online-and-api-at/"),
                            QString("fakefeeder"),
                            QString("fakefeeder"));
-    fprintf(stderr, "Ret %d\n", ret);
+    qDebug() << "Ret" << ret;
 
     feed->addItem(QString("icon-m-content-document"),
                            QString("Gogo grabs 1MHz spectrum from JetBlue subsidiary LiveTV, beefs up in-flight bandwidth "),
