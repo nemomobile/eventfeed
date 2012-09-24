@@ -111,8 +111,8 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
 
     id = last_id.toLongLong();
     if (!icon.isEmpty()) {
-        query.prepare("INSERT INTO images (id, position, originalPath) VALUES "
-                                         "(:id, :position, :originalPath)");
+        query.prepare("INSERT INTO images (id, position, originalPath, type) VALUES "
+                                         "(:id, :position, :originalPath, 'image')");
         query.bindValue(":id", id);
         query.bindValue(":position", -1);
         query.bindValue(":originalPath", icon);
@@ -123,11 +123,16 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
     int counter = 0;
     foreach (const QString &imgpath, parameters["imageList"].toStringList()) {
         qDebug() << "Adding " << imgpath << " to event " << id;
-        query.prepare("INSERT INTO images (id, position, originalPath) VALUES "
-                                         "(:id, :position, :originalPath)");
+        query.prepare("INSERT INTO images (id, position, originalPath, type) VALUES "
+                                         "(:id, :position, :originalPath, :type)");
         query.bindValue(":id", id);
         query.bindValue(":position", counter);
         query.bindValue(":originalPath", imgpath);
+        if (counter == 0 && parameters["video"].toBool()) {
+            query.bindValue(":type", "video");
+        } else {
+            query.bindValue(":type", "image");
+        }
         query.exec();
         counter++;
     }

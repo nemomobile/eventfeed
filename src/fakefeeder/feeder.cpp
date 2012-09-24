@@ -59,7 +59,7 @@ void Feeder::newfeed()
                            QStringList("/home/nemo/merlogo.png"),
                            QDateTime::currentDateTime(),
                            QString("by Michael Gorman"),
-                           false,
+                           true,
                            QUrl("http://www.engadget.com/2012/05/07/gogo-buys-1mhz-spectrum-inflight-wifi/"),
                            QString("fakefeeder"),
                            QString("fakefeeder"));
