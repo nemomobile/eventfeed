@@ -2,7 +2,7 @@
 
 PROJECT="eventfeed"
 
-VERSION="0.0.1"
+VERSION=$(git describe --tags --abbrev=0)
 
 # Set name of toplevel directory for the archive
 PREFIX="${PROJECT}-${VERSION}/"
