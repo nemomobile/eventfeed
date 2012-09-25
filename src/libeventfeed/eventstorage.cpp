@@ -30,7 +30,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#include <QDebug>
 #include <QDir>
 #include <QtCore/QVariant>
 #include "eventstorage.h"
@@ -123,10 +122,8 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
         query.exec();
     }
 
-    qDebug() << __FILE__ << __LINE__ << "imageList:" << parameters["imageList"].toStringList();
     int counter = 0;
     foreach (const QString &imgpath, parameters["imageList"].toStringList()) {
-        qDebug() << "Adding " << imgpath << " to event " << id;
         query.prepare("INSERT INTO images (id, position, originalPath, type) VALUES "
                                          "(:id, :position, :originalPath, :type)");
         query.bindValue(":id", id);
