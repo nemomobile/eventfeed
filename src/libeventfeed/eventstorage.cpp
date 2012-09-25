@@ -66,6 +66,10 @@ void EventStorage::open()
     } else {
         QSqlQuery query;
 
+        if (!query.exec("PRAGMA foreign_keys = ON")) {
+            qFatal("No foreign keys support in SQLite");
+        }
+
         if (!query.exec("SELECT count(*) FROM events")) {
             qFatal("Wrong DB schema");
         }
@@ -151,9 +155,6 @@ bool EventStorage::removeItem(const qlonglong &id)
     query.exec();
     if (query.numRowsAffected() > 0) {
         m_itemCount--;
-        query.prepare("DELETE FROM images WHERE id = :id");
-        query.bindValue(":id", id);
-        query.exec();
         return true;
     } else {
         return false;
@@ -171,10 +172,6 @@ const QList<qlonglong> EventStorage::removeItemsBySourceName(const QString &sour
     while (query.next()) {
         ids.append(query.value(0).toLongLong());
     }
-    query.prepare("DELETE FROM images WHERE id IN "
-                    "(SELECT id FROM events WHERE sourceName = :sourceName)");
-    query.bindValue(":sourceName", sourceName);
-    query.exec();
     query.prepare("DELETE FROM events WHERE sourceName = :sourceName");
     query.bindValue(":sourceName", sourceName);
     query.exec();
@@ -204,7 +201,6 @@ QList<Event *> EventStorage::getAllItems()
         QString sourceDisplayName = query.value(7).toString();
         QString icon = query.value(8).toString();
 
-        // TODO: try to reduce the amount of SQL queries
         query_img.prepare("SELECT originalPath FROM images "
                           "WHERE id = :id AND position >= 0 "
                           "ORDER BY position ASC");
@@ -248,7 +244,8 @@ void EventStorage::reset()
             "CREATE TABLE images ("
                 "id INTEGER, position INTEGER, "
                 "originalPath TEXT, "
-                "type TEXT, PRIMARY KEY(id, position))");
+                "type TEXT, PRIMARY KEY(id, position) "
+                "FOREIGN KEY(id) REFERENCES events(id) ON DELETE CASCADE)");
     ret = ret && QSqlQuery().exec("PRAGMA user_version=" STR(DB_SCHEMA_VERSION));
     if (!ret) {
         qFatal("Can't create db schema");
