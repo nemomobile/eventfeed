@@ -4,12 +4,12 @@
         <method name="addItem">
             <arg name="parameters" type="a{sv}" direction="in"/>
             <arg type="x" direction="out"/>
-            <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantMap"/>
-            <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="qint64"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="qint64"/>
         </method>
         <method name="removeItem">
             <arg name="id" type="x" direction="in"/>
-            <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="qint64"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="qint64"/>
         </method>
         <method name="removeItemsBySourceName">
             <arg name="sourceName" type="s" direction="in"/>
@@ -17,11 +17,11 @@
 
         <signal name="eventAdded">
             <arg name="event" type="a{sv}" />
-            <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
         </signal>
         <signal name="eventsRemoved">
             <arg name="events" type="ax" />
-            <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QList &lt; qlonglong &gt; "/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList &lt; qlonglong &gt; "/>
         </signal>
     </interface>
 </node>
