@@ -82,6 +82,8 @@ EventModel::~EventModel()
 
 int EventModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
+
     return m_events.count();
 }
 
@@ -149,8 +151,10 @@ void EventModel::removeEvents(const QList<qlonglong> &ids)
     }
 }
 
-void EventModel::connectFeeder(QString str)
+void EventModel::connectFeeder(const QString &serviceName)
 {
+    Q_UNUSED(serviceName);
+
     if (m_feeder) {
         return;
     }
@@ -163,7 +167,10 @@ void EventModel::connectFeeder(QString str)
             this, SLOT(removeEvents(const QList<qlonglong>&)));
 }
 
-void EventModel::disconnectFeeder(QString) {
+void EventModel::disconnectFeeder(const QString &serviceName)
+{
+    Q_UNUSED(serviceName);
+
     if (m_feeder) {
         delete m_feeder;
         m_feeder = NULL;

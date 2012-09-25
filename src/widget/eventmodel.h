@@ -76,8 +76,8 @@ private:
     QDBusServiceWatcher *m_watcher;
 
 private slots:
-    void connectFeeder(QString = "");
-    void disconnectFeeder(QString = "");
+    void connectFeeder(const QString &serviceName = "");
+    void disconnectFeeder(const QString &serviceName = "");
 };
 
 #endif /* EVENTMODEL_H */
