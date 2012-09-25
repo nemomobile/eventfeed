@@ -35,6 +35,11 @@
 #include "eventsqmlplugin.h"
 #include "eventmodel.h"
 
+EventsQmlPlugin::EventsQmlPlugin(QObject *parent) :
+    QDeclarativeExtensionPlugin(parent)
+{
+}
+
 void EventsQmlPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.nemomobile.events"));

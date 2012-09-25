@@ -39,6 +39,7 @@ class EventsQmlPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 public:
+    explicit EventsQmlPlugin(QObject *parent = 0);
     void registerTypes(const char *uri);
 };
 

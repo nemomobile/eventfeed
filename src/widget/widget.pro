@@ -3,7 +3,6 @@ PROJECT_NAME = events
 TEMPLATE = lib
 CONFIG += qt plugin
 
-# FIXME: is sql really needed here?
 QT += declarative dbus sql
 
 TARGET = qmleventsplugin
