@@ -17,4 +17,8 @@ HEADERS = eventstorage.h \
 SOURCES = eventstorage.cpp \
           event.cpp
 
-INSTALLS += target
+PUBLICHEADERS = $$HEADERS
+publicheaders.files = $$PUBLICHEADERS
+publicheaders.path = /usr/include/eventfeed
+
+INSTALLS += target publicheaders
