@@ -41,7 +41,7 @@ EventStorage::EventStorage(QObject *parent)
   : QObject(parent)
 {
     m_dbname = QDir::homePath() + "/" + DB_DIR + "/" + DB_NAME;
-    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db = QSqlDatabase::addDatabase("QSQLITE", "EventStorage");
     m_db.setDatabaseName(m_dbname);
 }
 
@@ -63,7 +63,7 @@ void EventStorage::open()
     if (!m_db.open() || !isSchemaValid()) {
         reset();
     } else {
-        QSqlQuery query;
+        QSqlQuery query(m_db);
 
         if (!query.exec("PRAGMA foreign_keys = ON")) {
             qFatal("No foreign keys support in SQLite");
@@ -85,7 +85,7 @@ void EventStorage::close()
 
 qlonglong EventStorage::addItem(const QVariantMap &parameters)
 {
-    QSqlQuery query;
+    QSqlQuery query(m_db);
     qlonglong id;
     QString icon = parameters["icon"].toString();
 
@@ -146,7 +146,7 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
 
 bool EventStorage::removeItem(const qlonglong &id)
 {
-    QSqlQuery query;
+    QSqlQuery query(m_db);
     query.prepare("DELETE FROM events WHERE id = :id");
     query.bindValue(":id", id);
     query.exec();
@@ -160,7 +160,7 @@ bool EventStorage::removeItem(const qlonglong &id)
 
 const QList<qlonglong> EventStorage::removeItemsBySourceName(const QString &sourceName)
 {
-    QSqlQuery query;
+    QSqlQuery query(m_db);
     QList<qlonglong> ids;
     m_db.transaction();
     query.prepare("SELECT id FROM events WHERE sourceName = :sourceName");
@@ -180,7 +180,7 @@ const QList<qlonglong> EventStorage::removeItemsBySourceName(const QString &sour
 QList<Event *> EventStorage::getAllItems()
 {
     QList<Event *> events;
-    QSqlQuery query, query_img;
+    QSqlQuery query(m_db), query_img(m_db);
     query.exec("SELECT e.id, e.title, e.body, e.timestamp, e.footer, "
                       "e.url, e.sourceName, e.sourceDisplayName, "
                       "i.originalPath FROM events e "
@@ -229,7 +229,7 @@ void EventStorage::reset()
     }
 
     bool ret;
-    ret = QSqlQuery().exec(
+    ret = QSqlQuery(m_db).exec(
             "CREATE TABLE events ("
                 "id INTEGER PRIMARY KEY, "
                 "title TEXT, body TEXT, "
@@ -237,13 +237,13 @@ void EventStorage::reset()
                 "action TEXT, url TEXT, "
                 "sourceName TEXT, "
                 "sourceDisplayName TEXT)");
-    ret = ret && QSqlQuery().exec(
+    ret = ret && QSqlQuery(m_db).exec(
             "CREATE TABLE images ("
                 "id INTEGER, position INTEGER, "
                 "originalPath TEXT, "
                 "type TEXT, PRIMARY KEY(id, position) "
                 "FOREIGN KEY(id) REFERENCES events(id) ON DELETE CASCADE)");
-    ret = ret && QSqlQuery().exec("PRAGMA user_version=" STR(DB_SCHEMA_VERSION));
+    ret = ret && QSqlQuery(m_db).exec("PRAGMA user_version=" STR(DB_SCHEMA_VERSION));
     if (!ret) {
         qFatal("Can't create db schema");
     }
@@ -252,7 +252,7 @@ void EventStorage::reset()
 
 bool EventStorage::isSchemaValid()
 {
-    QSqlQuery query;
+    QSqlQuery query(m_db);
 
     if (!query.exec("PRAGMA user_version")) {
         return false;
@@ -270,7 +270,7 @@ void EventStorage::purgeOutdatedItems()
     QList<qlonglong> ids;
 
     if (m_itemCount > MAX_EVENT_ITEMS) {
-        QSqlQuery query;
+        QSqlQuery query(m_db);
         m_db.transaction();
         query.exec("SELECT id FROM events ORDER BY timestamp ASC, id ASC LIMIT "
                     STR(EVENT_COUNT_HYSTERESIS));
