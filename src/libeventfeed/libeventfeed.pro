@@ -17,8 +17,9 @@ HEADERS = eventstorage.h \
 SOURCES = eventstorage.cpp \
           event.cpp
 
-PUBLICHEADERS = $$HEADERS
-publicheaders.files = $$PUBLICHEADERS
-publicheaders.path = /usr/include/eventfeed
+headers.files = $$HEADERS
+headers.path = /usr/include/eventfeed
+prf.path = $$[QT_INSTALL_DATA]/mkspecs/features
+prf.files = eventfeed.prf
 
-INSTALLS += target publicheaders
+INSTALLS += target headers prf
