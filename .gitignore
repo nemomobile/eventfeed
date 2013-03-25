@@ -1,3 +1,7 @@
 *.swp
 moc_*
 *.o
+*.so*
+Makefile
+*proxy.*
+*adaptor.*
