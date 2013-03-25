@@ -54,6 +54,7 @@ public slots:
     void open();
     void close();
     qlonglong addItem(const QVariantMap &parameters);
+    void updateItem(const qlonglong &id, const QVariantMap &parameters);
     bool removeItem(const qlonglong &id);
     const QList<qlonglong> removeItemsBySourceName(const QString &sourceName);
     QList<Event *> getAllItems();
@@ -62,6 +63,7 @@ signals:
     void itemsOutdated(const QList<qlonglong>& ids);
 
 private:
+    void addImages(const qlonglong &id, const QVariantMap &parameters);
     QString m_dbname;
     QSqlDatabase m_db;
     qlonglong m_itemCount;

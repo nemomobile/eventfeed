@@ -24,4 +24,3 @@ prf.files = meegotouchevents.prf
 INSTALLS += target \
             headers \
             prf
-

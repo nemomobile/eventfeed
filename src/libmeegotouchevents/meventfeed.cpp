@@ -85,6 +85,42 @@ qlonglong MEventFeed::addItem(const QString &icon, const QString &title, const Q
     return proxy.addItem(parameters);
 }
 
+void MEventFeed::updateItem(qlonglong id, const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName)
+{
+    QVariantMap parameters;
+    if (!icon.isEmpty()) {
+        parameters.insert("icon", icon);
+    }
+    if (!title.isEmpty()) {
+        parameters.insert("title", title);
+    }
+    if (!body.isEmpty()) {
+        parameters.insert("body", body);
+    }
+    if (!imageList.isEmpty()) {
+        parameters.insert("imageList", imageList);
+    }
+    if (timestamp.isValid()) {
+        parameters.insert("timestamp", timestamp.toString(Qt::ISODate));
+    }
+    if (!footer.isEmpty()) {
+        parameters.insert("footer", footer);
+    }
+    if (video) {
+        parameters.insert("video", video);
+    }
+    if (!url.isEmpty()) {
+        parameters.insert("url", url.toString());
+    }
+    if (!sourceName.isEmpty()) {
+        parameters.insert("sourceName", sourceName);
+    }
+    if (!sourceDisplayName.isEmpty()) {
+        parameters.insert("sourceDisplayName", sourceDisplayName);
+    }
+    proxy.updateItem(id, parameters);
+}
+
 void MEventFeed::removeItem(qlonglong id)
 {
     proxy.removeItem(id);

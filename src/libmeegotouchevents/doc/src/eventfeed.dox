@@ -1,0 +1,30 @@
+/*! \page eventfeed Event Feed
+
+An event feed item consists of
+- an icon (mandatory)
+- a title text (mandatory)
+- a body text
+- a footer text
+- a time stamp (mandatory)
+- up to 3 images
+
+In addition to these, the following information is associated with the item:
+- an event feed source identifier (mandatory)
+- an event feed source in human readable form (mandatory)
+- a URL to be opened when the item is tapped
+- whether the images associated with the item are to be visualized as video links
+
+Event feed items can be created and manipulated by various methods in the MEventFeed class. After getting an instance of MEventFeed using MEventFeed::instance(), MEventFeed::addItem() can be used to add an event feed item and MEventFeed::removeItemsBySourceName() can be used to remove all event feed items from a certain event feed source.
+
+The icon and the images to be used should be given as absolute paths.
+
+The event feed source identifier identifies which source (application, service...) the event feed item is originating from. All items from the same source should use the same identifier.
+
+The human readable event feed source is used in the context menu for the event feed item, allowing the user to for example remove all items from the same source.
+
+\section links Links
+
+\see
+
+- MEventFeed
+*/

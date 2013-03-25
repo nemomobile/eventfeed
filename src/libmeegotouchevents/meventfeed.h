@@ -83,6 +83,23 @@ public:
     qlonglong addItem(const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName);
 
     /*!
+     * Updates an item in the event feed.
+     *
+     * \param id unique id for the event feed item to be updated
+     * \param icon the icon id for the feed item or absolute path to an image file. The icon must exist when addItem() is called. If the icon image is unique its path must be unique (same path should not be reused for different images).
+     * \param title the title for the feed item
+     * \param body the body text for the feed item
+     * \param imageList the image list for the feed item. If the images in list start with /, they're interpreted as absolute paths, otherwise as image IDs from the theme. The images must exist when addItem() is called. If an image is unique its path must be unique (same path should not be reused for different images).
+     * \param timestamp timestamp for the feed item
+     * \param footer the footer text for the feed item. If there is no visible text to be shown in the footer the footer should be empty.
+     * \param video if true, marks that the event item contains video content. The video content is limited to one thumbnail in the image list. The thumbnail will have a play button overlay rendered on top of it.
+     * \param url the url to be executed when item is clicked. Executed action for URL is the default action provided by libcontentaction for the URL's scheme.
+     * \param sourceName identifier for the event source e.g. application name, which should be persistent.
+     * \param sourceDisplayName the source description in localized form which will be displayed in the UI in event feed item's object menu.
+     */
+    void updateItem(qlonglong id, const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName);
+
+    /*!
      * Removes an item from the event feed.
      *
      * \param id the id of the feed item

@@ -48,6 +48,7 @@ public:
 
 public Q_SLOTS: // METHODS
     qlonglong addItem(const QVariantMap  &parameters);
+    void updateItem(qlonglong id, const QVariantMap  &parameters);
     void removeItem(qlonglong id);
     void removeItemsBySourceName(const QString &sourceName);
 Q_SIGNALS: // SIGNALS

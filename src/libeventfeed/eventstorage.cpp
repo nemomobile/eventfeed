@@ -87,7 +87,6 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
 {
     QSqlQuery query(m_db);
     qlonglong id;
-    QString icon = parameters["icon"].toString();
 
     purgeOutdatedItems();
 
@@ -113,6 +112,18 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
     }
 
     id = last_id.toLongLong();
+    addImages(id, parameters);
+    m_db.commit();
+
+    m_itemCount++;
+
+    return id;
+}
+
+void EventStorage::addImages(const qlonglong &id, const QVariantMap &parameters)
+{
+    QSqlQuery query(m_db);
+    QString icon = parameters["icon"].toString();
     if (!icon.isEmpty()) {
         query.prepare("INSERT INTO images (id, position, originalPath, type) VALUES "
                                          "(:id, :position, :originalPath, 'image')");
@@ -137,11 +148,32 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
         query.exec();
         counter++;
     }
+}
+
+void EventStorage::updateItem(const qlonglong &id, const QVariantMap &parameters)
+{
+    removeItem(id);
+
+    QSqlQuery query(m_db);
+    m_db.transaction();
+    query.prepare("INSERT INTO events (id, title, body, timestamp, footer, url, "
+                                      "sourceName, sourceDisplayName) "
+                  "VALUES (:id, :title, :body, :timestamp, :footer, :url, "
+                          ":sourceName, :sourceDisplayName)");
+    query.bindValue(":id",         id);
+    query.bindValue(":title",      parameters["title"].toString());
+    query.bindValue(":body",       parameters["body"].toString());
+    query.bindValue(":timestamp",  parameters["timestamp"].toString());
+    query.bindValue(":footer",     parameters["footer"].toString());
+    query.bindValue(":url",        parameters["url"].toString());
+    query.bindValue(":sourceName", parameters["sourceName"].toString());
+    query.bindValue(":sourceDisplayName",
+            parameters["sourceDisplayName"].toString());
+    query.exec();
+    addImages(id, parameters);
     m_db.commit();
 
     m_itemCount++;
-
-    return id;
 }
 
 bool EventStorage::removeItem(const qlonglong &id)

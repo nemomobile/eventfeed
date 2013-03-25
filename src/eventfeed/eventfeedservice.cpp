@@ -76,6 +76,18 @@ qlonglong EventFeedService::addItem(const QVariantMap &parameters)
     return id;
 }
 
+void EventFeedService::updateItem(qlonglong id, const QVariantMap &parameters)
+{
+    QVariantMap event_params = parameters;
+    m_timer.stop();
+
+    m_storage.updateItem(id, parameters);
+    event_params["id"] = id;
+    emit eventAdded(event_params);
+
+    m_timer.start();
+}
+
 void EventFeedService::removeItem(qlonglong id)
 {
     m_timer.stop();

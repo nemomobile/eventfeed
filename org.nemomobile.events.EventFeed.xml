@@ -7,6 +7,12 @@
             <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
             <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="qint64"/>
         </method>
+        <method name="updateItem">
+            <arg name="id" type="x" direction="in"/>
+            <arg name="parameters" type="a{sv}" direction="in"/>
+            <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="qint64"/>
+            <annotation name="com.trolltech.QtDBus.QtTypeName.In1" value="QVariantMap"/>
+        </method>
         <method name="removeItem">
             <arg name="id" type="x" direction="in"/>
             <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="qint64"/>

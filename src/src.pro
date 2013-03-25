@@ -6,4 +6,5 @@ SUBDIRS = libmeegotouchevents \
           libeventfeed \
           eventfeed \
           widget \
-          fakefeeder
+          fakefeeder \
+          libmeegotouchevents/doc
