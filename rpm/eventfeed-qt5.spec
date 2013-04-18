@@ -2,7 +2,7 @@
 Name:       libeventfeed-qt5
 
 Summary:    D-Bus interface for MeegoTouch Events
-Version:    0.1.3
+Version:    0.1.4
 Release:    0
 Group:      System/GUI/Other
 License:    BSD License
