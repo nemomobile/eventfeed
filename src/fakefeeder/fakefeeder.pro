@@ -16,7 +16,8 @@ HEADERS += \
     feeder.h
 
 INCLUDEPATH += ../libmeegotouchevents
-LIBS += -L../libmeegotouchevents -lmeegotouchevents
+equals(QT_MAJOR_VERSION, 4): LIBS += -L../libmeegotouchevents -lmeegotouchevents
+equals(QT_MAJOR_VERSION, 5): LIBS += -L../libmeegotouchevents -lmeegotouchevents-qt5
 
 target.path = /usr/bin
 INSTALLS += target

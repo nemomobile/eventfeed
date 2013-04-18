@@ -20,7 +20,8 @@ SOURCES = eventfeedservice.cpp \
           main.cpp
 
 INCLUDEPATH += ../libeventfeed
-LIBS += -L../libeventfeed -leventfeed
+equals(QT_MAJOR_VERSION, 4): LIBS += -L../libeventfeed -leventfeed
+equals(QT_MAJOR_VERSION, 5): LIBS += -L../libeventfeed -leventfeed-qt5
 
 services.files = *.service
 services.path = $$INSTALL_ROOT$$PREFIX/share/dbus-1/services

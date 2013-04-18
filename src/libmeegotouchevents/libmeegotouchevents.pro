@@ -1,6 +1,7 @@
 TEMPLATE = lib
 
-TARGET = meegotouchevents
+equals(QT_MAJOR_VERSION, 4): TARGET = meegotouchevents
+equals(QT_MAJOR_VERSION, 5): TARGET = meegotouchevents-qt5
 isEmpty(PREFIX) {
     PREFIX=/usr
 }
@@ -19,7 +20,8 @@ headers.files = meventfeedproxy.h \
 headers.path = $$INSTALL_ROOT$$PREFIX/include/$$TARGET
 
 prf.path = $$[QT_INSTALL_DATA]/mkspecs/features
-prf.files = meegotouchevents.prf
+equals(QT_MAJOR_VERSION, 4): prf.files = meegotouchevents.prf
+equals(QT_MAJOR_VERSION, 5): prf.files = meegotouchevents-qt5.prf
 
 INSTALLS += target \
             headers \
