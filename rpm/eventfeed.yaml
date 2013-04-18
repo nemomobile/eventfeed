@@ -1,0 +1,82 @@
+Name: eventfeed
+Summary: Event feed subsystem
+Version: 0.1.3
+Release: 0
+Group: System/GUI/Other
+License: BSD License
+URL: http://www.meego.com
+Sources:
+    - "%{name}-%{version}.tar.bz2"
+Description: |
+    This package provides a D-Bus service and a QML component needed to show |
+    event items.
+Obsoletes:
+    - eventfeed-qmlapi
+    - libeventfeed
+    - libeventfeed-devel
+
+PkgBR:
+    - qt-devel-tools
+    - doxygen
+PkgConfigBR:
+    - QtCore >= 4.6.0
+    - QtDBus
+    - QtGui
+Configure: none
+Builder: qmake
+Files:
+    - "%{_usr}/bin/eventfeedd"
+    - "%{_datadir}/dbus-1/*"
+    - "%{_libdir}/qt4/imports/org/nemomobile/events/*"
+    - "%{_libdir}/libeventfeed.so.*"
+
+SubPackages:
+    - Name: devel
+      Summary: Development files for eventfeed
+      Description: Files useful for building event feed services.
+      Group: System/Libraries
+      License: BSD License
+      Files:
+          - "%{_includedir}/eventfeed/*.h"
+          - "%{_datadir}/qt4/mkspecs/features/eventfeed.prf"
+          - "%{_libdir}/libeventfeed.so"
+    - Name: libmeegotouchevents
+      AsWholeName: yes
+      Summary: D-Bus interface for MeegoTouch Events
+      AutoDepend: no
+      Group: Applications/System
+      Description: |
+          This library provides D-Bus interface to MeegoTouch Events.
+      Files:
+          - "%{_libdir}/libmeegotouchevents.so.*"
+    - Name: libmeegotouchevents-devel
+      AsWholeName: yes
+      AutoDepend: no
+      Summary: Development files for libmeegotouchevents
+      Group: Development/Libraries
+      Requires:
+          - libmeegotouchevents = %{version}
+      Description: |
+          This package contains development files for libmeegotouchevents.
+      Files:
+          - "%{_libdir}/libmeegotouchevents.so"
+          - "%{_includedir}/meegotouchevents/*.h"
+          - "%{_datadir}/qt4/mkspecs/features/meegotouchevents.prf"
+    - Name: libmeegotouchevents-doc
+      AsWholeName: yes
+      AutoDepend: no
+      Summary: Documentation for libmeegotouchevents
+      Group: Documentation
+      Description: |
+          This package contains documentation for libmeegotouchevents.
+      Files:
+          - "%{_datadir}/doc/libmeegotouchevents/*"
+    - Name: fakefeeder
+      AsWholeName: yes
+      Group: Applications/System
+      Summary: Utility creating fake events with libmeegotouchevents
+      Description: |
+          This utility creates fake events that might be useful when |
+          developing event views.
+      Files:
+          - "%{_usr}/bin/fakefeeder"
