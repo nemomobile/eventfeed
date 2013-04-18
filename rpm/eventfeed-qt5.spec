@@ -8,14 +8,12 @@ Group:      System/GUI/Other
 License:    BSD License
 URL:        http://www.meego.com
 Source0:    %{_name}-%{version}.tar.bz2
-Source100:  eventfeed.yaml
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Sql)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  qt5-tools
 BuildRequires:  doxygen
-Obsoletes:   eventfeed-qmlapi
 
 %description
 This library provides D-Bus interface to MeegoTouch Events.
