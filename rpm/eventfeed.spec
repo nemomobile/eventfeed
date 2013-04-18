@@ -9,37 +9,46 @@ Name:       eventfeed
 # << macros
 
 Summary:    Event feed subsystem
-Version:    0.1.3
+Version:    0.1.4
 Release:    0
 Group:      System/GUI/Other
 License:    BSD License
 URL:        http://www.meego.com
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  eventfeed.yaml
-Requires(post): /sbin/ldconfig
-Requires(postun): /sbin/ldconfig
 BuildRequires:  pkgconfig(QtCore) >= 4.6.0
 BuildRequires:  pkgconfig(QtDBus)
 BuildRequires:  pkgconfig(QtGui)
 BuildRequires:  qt-devel-tools
 BuildRequires:  doxygen
 Obsoletes:   eventfeed-qmlapi
-Obsoletes:   libeventfeed
-Obsoletes:   libeventfeed-devel
 
 %description
 This package provides a D-Bus service and a QML component needed to show |
 event items.
 
 
-%package devel
-Summary:    Development files for eventfeed
-License:    BSD License
-Group:      System/Libraries
-Requires:   %{name} = %{version}-%{release}
+%package -n libeventfeed
+Summary:    D-Bus interface for MeegoTouch Events
+Group:      Applications/System
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
 
-%description devel
-Files useful for building event feed services.
+%description -n libeventfeed
+This library provides D-Bus interface to MeegoTouch Events.
+
+
+%package -n libeventfeed-devel
+Summary:    Development files for libeventfeed
+License:    BSD License
+Group:      Development/Libraries
+Requires:   libeventfeed = %{version}
+Provides:   eventfeed-devel = %{version}
+Obsoletes:   eventfeed-devel < %{version}
+
+%description -n libeventfeed-devel
+This package contains development files for libeventfeed.
+
 
 %package -n libmeegotouchevents
 Summary:    D-Bus interface for MeegoTouch Events
@@ -106,9 +115,9 @@ rm -rf %{buildroot}
 # << install post
 
 
-%post -p /sbin/ldconfig
+%post -n libeventfeed -p /sbin/ldconfig
 
-%postun -p /sbin/ldconfig
+%postun -n libeventfeed -p /sbin/ldconfig
 
 %post -n libmeegotouchevents -p /sbin/ldconfig
 
@@ -118,18 +127,23 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{_usr}/bin/eventfeedd
 %{_datadir}/dbus-1/*
-%{_libdir}/qt4/imports/org/nemomobile/events/*
-%{_libdir}/libeventfeed.so.*
 # >> files
 # << files
 
-%files devel
+%files -n libeventfeed
+%defattr(-,root,root,-)
+%{_libdir}/qt4/imports/org/nemomobile/events/*
+%{_libdir}/libeventfeed.so.*
+# >> files libeventfeed
+# << files libeventfeed
+
+%files -n libeventfeed-devel
 %defattr(-,root,root,-)
 %{_includedir}/eventfeed/*.h
 %{_datadir}/qt4/mkspecs/features/eventfeed.prf
 %{_libdir}/libeventfeed.so
-# >> files devel
-# << files devel
+# >> files libeventfeed-devel
+# << files libeventfeed-devel
 
 %files -n libmeegotouchevents
 %defattr(-,root,root,-)
