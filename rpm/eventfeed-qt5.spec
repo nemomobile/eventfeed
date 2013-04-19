@@ -7,7 +7,7 @@ Release:    0
 Group:      System/GUI/Other
 License:    BSD License
 URL:        http://www.meego.com
-Source0:    %{_name}-%{version}.tar.bz2
+Source0:    %{name}-%{version}.tar.bz2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Sql)
