@@ -87,11 +87,11 @@ This package contains documentation for libmeegotouchevents.
 %{_datadir}/doc/libmeegotouchevents-qt5/*
 
 %prep
-%setup -q -n %{_name}-%{version}
+%setup -q -n %{name}-%{version}
 
 %build
 
-%qmake 
+%qmake5
 
 make %{?jobs:-j%jobs}
 
