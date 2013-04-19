@@ -93,7 +93,7 @@ This package contains documentation for libmeegotouchevents.
 
 %qmake5
 
-make %{?jobs:-j%jobs}
+QT_SELECT=5 make %{?jobs:-j%jobs}
 
 %install
 rm -rf %{buildroot}
