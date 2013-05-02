@@ -1,2 +1,2 @@
-INCLUDEPATH += /usr/include/eventfeed
-LIBS += -leventfeed
+INCLUDEPATH += /usr/include/eventfeed-qt5
+LIBS += -leventfeed-qt5
