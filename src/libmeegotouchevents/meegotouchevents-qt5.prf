@@ -1,2 +1,2 @@
-INCLUDEPATH += /usr/include/meegotouchevents
-LIBS += -lmeegotouchevents
+INCLUDEPATH += /usr/include/meegotouchevents-qt5
+LIBS += -lmeegotouchevents-qt5
