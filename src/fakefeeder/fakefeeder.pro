@@ -1,3 +1,5 @@
+include(../../common.pri)
+
 QT += core
 QT += dbus
 QT -= gui
@@ -16,8 +18,7 @@ HEADERS += \
     feeder.h
 
 INCLUDEPATH += ../libmeegotouchevents
-equals(QT_MAJOR_VERSION, 4): LIBS += -L../libmeegotouchevents -lmeegotouchevents
-equals(QT_MAJOR_VERSION, 5): LIBS += -L../libmeegotouchevents -lmeegotouchevents-qt5
+LIBS += -L../libmeegotouchevents -lmeegotouchevents$${DASH_QT_VERSION}
 
 target.path = /usr/bin
 INSTALLS += target
