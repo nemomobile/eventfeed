@@ -45,6 +45,19 @@ This package contains development files for libeventfeed.
 %{_datadir}/qt5/mkspecs/features/eventfeed-qt5.prf
 %{_libdir}/libeventfeed-qt5.so
 
+%package -n libeventfeed-qt5-tests
+Summary:    Test suite for libeventfeed
+License:    BSD License
+Group:      Development/Libraries
+Requires:   libeventfeed-qt5 = %{version}
+
+%description -n libeventfeed-qt5-tests
+This package contains test suite for libeventfeed.
+
+%files -n libeventfeed-qt5-tests
+%defattr(-,root,root,-)
+/opt/tests/libeventfeed-qt5/*
+
 %package -n libmeegotouchevents-qt5
 Summary:    D-Bus interface for MeegoTouch Events
 Group:      Applications/System
