@@ -64,6 +64,7 @@ signals:
 
 private:
     void addImages(const qlonglong &id, const QVariantMap &parameters);
+    static QDir dataDir();
     QString m_dbname;
     QSqlDatabase m_db;
     qlonglong m_itemCount;

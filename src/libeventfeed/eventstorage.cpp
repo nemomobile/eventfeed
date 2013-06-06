@@ -35,12 +35,12 @@
 #include "eventstorage.h"
 
 static const QString DB_NAME = "events.data";
-static const QString DB_DIR = ".config/eventfeed";
+static const QString DATA_SUBDIR = "eventfeed";
 
 EventStorage::EventStorage(QObject *parent)
   : QObject(parent)
 {
-    m_dbname = QDir::homePath() + "/" + DB_DIR + "/" + DB_NAME;
+    m_dbname = dataDir().filePath(DB_NAME);
     m_db = QSqlDatabase::addDatabase("QSQLITE", "EventStorage");
     m_db.setDatabaseName(m_dbname);
 }
@@ -54,9 +54,7 @@ EventStorage::~EventStorage()
 
 void EventStorage::open()
 {
-    QDir dir(QDir::homePath());
-
-    if (!dir.mkpath(DB_DIR)) {
+    if (!dataDir().mkpath(".")) {
         qFatal("Can't create directory for database files.");
     }
 
@@ -148,6 +146,14 @@ void EventStorage::addImages(const qlonglong &id, const QVariantMap &parameters)
         query.exec();
         counter++;
     }
+}
+
+QDir EventStorage::dataDir()
+{
+    static const QDir xdgDataHome = QProcessEnvironment::systemEnvironment()
+        .value("XDG_DATA_HOME", QDir::home().filePath(".config"));
+    static const QDir dataDir = xdgDataHome.filePath(DATA_SUBDIR);
+    return dataDir;
 }
 
 void EventStorage::updateItem(const qlonglong &id, const QVariantMap &parameters)
