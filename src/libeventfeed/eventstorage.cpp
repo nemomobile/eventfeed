@@ -282,6 +282,7 @@ void EventStorage::reset()
                 "type TEXT, PRIMARY KEY(id, position) "
                 "FOREIGN KEY(id) REFERENCES events(id) ON DELETE CASCADE)");
     ret = ret && QSqlQuery(m_db).exec("PRAGMA user_version=" STR(DB_SCHEMA_VERSION));
+    ret = ret && QSqlQuery(m_db).exec("PRAGMA foreign_keys = ON");
     if (!ret) {
         qFatal("Can't create db schema");
     }
