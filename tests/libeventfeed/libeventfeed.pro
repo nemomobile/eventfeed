@@ -15,3 +15,7 @@ tests_xml.path = $${INSTALL_TESTDIR}
 tests_xml.files = tests.xml
 tests_xml.CONFIG = no_check_exist
 INSTALLS += tests_xml
+
+check.depends = all
+check.CONFIG = phony recursive
+QMAKE_EXTRA_TARGETS += check
