@@ -6,6 +6,9 @@ SUBDIRS = libmeegotouchevents \
           libeventfeed \
           eventfeed \
           fakefeeder \
-          libmeegotouchevents/doc
+
+!nodoc {
+    SUBDIRS += libmeegotouchevents/doc
+}
 
 equals(QT_MAJOR_VERSION, 4): SUBDIRS += widget
