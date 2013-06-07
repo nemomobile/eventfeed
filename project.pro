@@ -6,3 +6,6 @@ SUBDIRS = src tests
 check.depends = all
 check.CONFIG = phony recursive
 QMAKE_EXTRA_TARGETS += check
+
+# Adds 'coverage' target
+include(coverage.pri)
