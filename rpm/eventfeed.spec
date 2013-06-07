@@ -13,7 +13,7 @@ Version:    0.1.4
 Release:    0
 Group:      System/GUI/Other
 License:    BSD License
-URL:        http://www.meego.com
+URL:        https://github.com/nemomobile/eventfeed
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  eventfeed.yaml
 BuildRequires:  pkgconfig(QtCore) >= 4.6.0
