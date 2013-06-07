@@ -53,28 +53,28 @@ public:
 
     const qlonglong id;
 
-    const QString icon() const;
-    const QString title() const;
-    const QString body() const;
-    const QStringList imageList() const;
-    const QString timestamp() const;
-    const QString footer() const;
-    const bool video() const;
-    const QString url() const;
-    const QString sourceName() const;
-    const QString sourceDisplayName() const;
+    QString icon() const;
+    QString title() const;
+    QString body() const;
+    QStringList imageList() const;
+    QString timestamp() const;
+    QString footer() const;
+    bool video() const;
+    QString url() const;
+    QString sourceName() const;
+    QString sourceDisplayName() const;
 
 private:
-    QString     m_icon;
-    QString     m_title;
-    QString     m_body;
-    QStringList m_imageList;
-    QString     m_timestamp;
-    QString     m_footer;
-    bool        m_video;
-    QString     m_url;
-    QString     m_sourceName;
-    QString     m_sourceDisplayName;
+    const QString     m_icon;
+    const QString     m_title;
+    const QString     m_body;
+    const QStringList m_imageList;
+    const QString     m_timestamp;
+    const QString     m_footer;
+    const bool        m_video;
+    const QString     m_url;
+    const QString     m_sourceName;
+    const QString     m_sourceDisplayName;
 };
 
 #endif /* EVENT_H */
