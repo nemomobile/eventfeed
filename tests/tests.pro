@@ -1,11 +1,7 @@
 TEMPLATE = subdirs
-CONFIG += ordered
-
-SUBDIRS = src tests
+SUBDIRS = \
+        libeventfeed \
 
 check.depends = all
 check.CONFIG = phony recursive
 QMAKE_EXTRA_TARGETS += check
-
-# Adds 'coverage' target
-include(coverage.pri)

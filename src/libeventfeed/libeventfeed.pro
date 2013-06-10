@@ -1,3 +1,5 @@
+include(../../common.pri)
+
 TEMPLATE = lib
 
 CONFIG += qt
@@ -8,8 +10,7 @@ isEmpty(PREFIX) {
     PREFIX=/usr
 }
 
-equals(QT_MAJOR_VERSION, 4): TARGET = eventfeed
-equals(QT_MAJOR_VERSION, 5): TARGET = eventfeed-qt5
+TARGET = eventfeed$${DASH_QT_VERSION}
 target.path = $$INSTALL_ROOT$$PREFIX/lib
 
 HEADERS = eventstorage.h \
@@ -19,10 +20,8 @@ SOURCES = eventstorage.cpp \
           event.cpp
 
 headers.files = $$HEADERS
-equals(QT_MAJOR_VERSION, 4): headers.path = /usr/include/eventfeed
-equals(QT_MAJOR_VERSION, 5): headers.path = /usr/include/eventfeed-qt5
+headers.path = /usr/include/eventfeed$${DASH_QT_VERSION}
 prf.path = $$[QT_INSTALL_DATA]/mkspecs/features
-equals(QT_MAJOR_VERSION, 4): prf.files = eventfeed.prf
-equals(QT_MAJOR_VERSION, 5): prf.files = eventfeed-qt5.prf
+prf.files = eventfeed$${DASH_QT_VERSION}.prf
 
 INSTALLS += target headers prf

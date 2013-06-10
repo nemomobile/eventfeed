@@ -4,7 +4,7 @@ Version: 0.1.4
 Release: 0
 Group: System/GUI/Other
 License: BSD License
-URL: http://www.meego.com
+URL: https://github.com/nemomobile/eventfeed
 Sources:
     - "%{name}-%{version}.tar.bz2"
 Description: |
@@ -55,6 +55,18 @@ SubPackages:
           - "%{_includedir}/eventfeed/*.h"
           - "%{_datadir}/qt4/mkspecs/features/eventfeed.prf"
           - "%{_libdir}/libeventfeed.so"
+    - Name: libeventfeed-tests
+      AsWholeName: yes
+      AutoDepend: no
+      Summary: Test suite for libeventfeed
+      Group: Development/Libraries
+      License: BSD License
+      Requires:
+          - libeventfeed = %{version}
+      Description: |
+          This package contains test suite for libeventfeed.
+      Files:
+          - "/opt/tests/libeventfeed/*"
     - Name: libmeegotouchevents
       AsWholeName: yes
       Summary: D-Bus interface for MeegoTouch Events

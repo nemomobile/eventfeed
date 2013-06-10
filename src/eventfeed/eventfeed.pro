@@ -1,3 +1,5 @@
+include(../../common.pri)
+
 TEMPLATE = app
 
 TARGET = eventfeedd
@@ -20,8 +22,7 @@ SOURCES = eventfeedservice.cpp \
           main.cpp
 
 INCLUDEPATH += ../libeventfeed
-equals(QT_MAJOR_VERSION, 4): LIBS += -L../libeventfeed -leventfeed
-equals(QT_MAJOR_VERSION, 5): LIBS += -L../libeventfeed -leventfeed-qt5
+LIBS += -L../libeventfeed -leventfeed$${DASH_QT_VERSION}
 
 services.files = *.service
 services.path = $$INSTALL_ROOT$$PREFIX/share/dbus-1/services

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -o errexit
+
+export XDG_DATA_HOME="/tmp/libeventfeed@DASH_QT_VERSION@-tests/.config"
+rm -rf ${XDG_DATA_HOME}
+
+cd $(dirname $0)
+
+exec ./"${@?Usage: $0 <test-name> [ARGS...]}"

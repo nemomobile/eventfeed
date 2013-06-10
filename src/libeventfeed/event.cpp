@@ -57,52 +57,52 @@ Event::Event(const qlonglong &eid,
 {
 }
 
-const QString Event::icon() const
+QString Event::icon() const
 {
     return m_icon;
 }
 
-const QString Event::title() const
+QString Event::title() const
 {
     return m_title;
 }
 
-const QString Event::body() const
+QString Event::body() const
 {
     return m_body;
 }
 
-const QStringList Event::imageList() const
+QStringList Event::imageList() const
 {
     return m_imageList;
 }
 
-const QString Event::timestamp() const
+QString Event::timestamp() const
 {
     return m_timestamp;
 }
 
-const QString Event::footer() const
+QString Event::footer() const
 {
     return m_footer;
 }
 
-const bool Event::video() const
+bool Event::video() const
 {
     return m_video;
 }
 
-const QString Event::url() const
+QString Event::url() const
 {
     return m_url;
 }
 
-const QString Event::sourceName() const
+QString Event::sourceName() const
 {
     return m_sourceName;
 }
 
-const QString Event::sourceDisplayName() const
+QString Event::sourceDisplayName() const
 {
     return m_sourceDisplayName;
 }
