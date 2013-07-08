@@ -9,7 +9,7 @@ Name:       eventfeed
 # << macros
 
 Summary:    Event feed subsystem
-Version:    0.1.4
+Version:    0.2.0
 Release:    0
 Group:      System/GUI/Other
 License:    BSD License

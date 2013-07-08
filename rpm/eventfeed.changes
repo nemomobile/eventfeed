@@ -1,3 +1,6 @@
+* Mon Jul 04 2013 Vesa Halttunen <vesa.halttunen@jollamobile.com> - 0.2.0
+- Allow storing item specific meta data for event feed items
+
 * Thu Apr 18 2013 Vesa Halttunen <vesa.halttunen@jollamobile.com> - 0.1.4
 - Package libraries for Qt5
 
