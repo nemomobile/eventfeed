@@ -4,7 +4,8 @@ include(../testapplication.pri)
 QT += sql
 
 INCLUDEPATH += ../../src/libeventfeed
-LIBS += -L../../src/libeventfeed -leventfeed$${DASH_QT_VERSION}
+QMAKE_LIBDIR = ../../src/libeventfeed
+LIBS = -leventfeed$${DASH_QT_VERSION}
 
 check.depends = all
 check.commands = '\

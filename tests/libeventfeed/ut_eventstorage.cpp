@@ -68,13 +68,14 @@ void UtEventStorage::addItem1()
 {
     m_parameters1["title"] = "title1";
     m_parameters1["body"] = "body1";
-    m_parameters1["timestamp"] = "timestamp1";
+    m_parameters1["timestamp"] = "2013-01-01 01:23:45";
     m_parameters1["footer"] = "footer1";
     m_parameters1["url"] = "http://foo1.example.com";
     m_parameters1["sourceName"] = "source1";
     m_parameters1["sourceDisplayName"] = "Source #1";
     m_parameters1["icon"] = "icon1";
     m_parameters1["imageList"] = QStringList() << "image11" << "image12";
+    m_parameters1["testKey"] = "testValue";
 
     m_id1 = m_storage->addItem(m_parameters1);
 
@@ -82,7 +83,7 @@ void UtEventStorage::addItem1()
 
     const QList<Event *> events = m_storage->getAllItems();
     QCOMPARE(events.count(), 1);
-    QCOMPARE(events.at(0)->id, m_id1);
+    QCOMPARE(events.at(0)->id(), m_id1);
     qDeleteAll(events);
 }
 
@@ -103,7 +104,7 @@ void UtEventStorage::addItem2()
 {
     m_parameters2["title"] = "title2";
     m_parameters2["body"] = "body2";
-    m_parameters2["timestamp"] = "timestamp2";
+    m_parameters2["timestamp"] = "2013-02-02 02:34:56";
     m_parameters2["footer"] = "footer2";
     m_parameters2["url"] = "http://foo2.example.com";
     m_parameters2["sourceName"] = "source2";
@@ -111,6 +112,7 @@ void UtEventStorage::addItem2()
     m_parameters2["icon"] = "icon2";
     m_parameters2["imageList"] = QStringList() << "image21" << "image22";
     m_parameters2["video"] = true;
+    m_parameters2["testKey"] = "testValue";
 
     m_id2 = m_storage->addItem(m_parameters2);
 
@@ -118,7 +120,7 @@ void UtEventStorage::addItem2()
 
     const QList<Event *> events = m_storage->getAllItems();
     QCOMPARE(events.count(), 2);
-    QCOMPARE(events.at(0)->id, m_id2);
+    QCOMPARE(events.at(0)->id(), m_id2);
     qDeleteAll(events);
 }
 
@@ -129,8 +131,6 @@ void UtEventStorage::testItem2Properties_data()
 
 void UtEventStorage::testItem2Properties()
 {
-    QEXPECT_FAIL("video", "'video=false' is hardcoded in EventStorage::getAllItems()", Abort);
-
     QFETCH(QVariant, expected);
     const QList<Event *> events = m_storage->getAllItems();
     QCOMPARE(readProperty(*events.at(0), QTest::currentDataTag()), expected);
@@ -141,7 +141,7 @@ void UtEventStorage::updateItem2()
 {
     m_parameters2Updated["title"] = "title2u";
     m_parameters2Updated["body"] = "body2u";
-    m_parameters2Updated["timestamp"] = "timestamp2u";
+    m_parameters2Updated["timestamp"] = "2013-03-03 03:43:21";
     m_parameters2Updated["footer"] = "footer2u";
     m_parameters2Updated["url"] = "http://foo2u.example.com";
     m_parameters2Updated["sourceName"] = "source2u";
@@ -150,12 +150,13 @@ void UtEventStorage::updateItem2()
     // intentionally lower the number of associated images!
     m_parameters2Updated["imageList"] = QStringList() << "image21u" /*<< "image22u"*/;
     m_parameters2Updated["video"] = false;
+    m_parameters2Updated["testKey"] = "testValueu";
 
     m_storage->updateItem(m_id2, m_parameters2Updated);
 
     const QList<Event *> events = m_storage->getAllItems();
     QCOMPARE(events.count(), 2);
-    QCOMPARE(events.at(0)->id, m_id2);
+    QCOMPARE(events.at(0)->id(), m_id2);
     qDeleteAll(events);
 }
 
@@ -177,7 +178,7 @@ void UtEventStorage::removeItem1()
     QVERIFY(m_storage->removeItem(m_id1));
     const QList<Event *> events = m_storage->getAllItems();
     QCOMPARE(events.count(), 1);
-    QCOMPARE(events.at(0)->id, m_id2);
+    QCOMPARE(events.at(0)->id(), m_id2);
     QCOMPARE(events.at(0)->title(), m_parameters2Updated["title"].toString());
     qDeleteAll(events);
 }
@@ -200,7 +201,7 @@ void UtEventStorage::purgeOutdatedItems()
     QVariantMap parameters;
     parameters["title"] = "title";
     parameters["body"] = "body";
-    parameters["timestamp"] = "timestamp";
+    parameters["timestamp"] = "2013-01-01 01:23:45";
     parameters["footer"] = "footer";
     parameters["url"] = "http://foo.example.com";
     parameters["sourceName"] = "source";
@@ -208,6 +209,7 @@ void UtEventStorage::purgeOutdatedItems()
     parameters["icon"] = "icon";
     parameters["imageList"] = QStringList() << "image1" << "image2";
     parameters["video"] = false;
+    parameters["testKey"] = "testValue";
 
     qRegisterMetaType<QList<qlonglong> >();
     QSignalSpy spy(m_storage, SIGNAL(itemsOutdated(QList<qlonglong>)));
@@ -256,11 +258,9 @@ QVariant UtEventStorage::readProperty(const Event &event, const QString &propert
     } else if (property == "imageList") {
         return event.imageList();
     } else if (property == "video") {
-        return event.video();
+        return event.isVideo();
     } else {
-        Q_ASSERT_X(false, Q_FUNC_INFO,
-                qPrintable(QString("Unexpected property name: '%1'").arg(property)));
-        return QVariant();
+        return event.metaData().value(property);
     }
 }
 

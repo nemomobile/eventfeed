@@ -41,7 +41,7 @@
 
 #define MAX_EVENT_ITEMS 250
 #define EVENT_COUNT_HYSTERESIS 20
-#define DB_SCHEMA_VERSION 2
+#define DB_SCHEMA_VERSION 3
 
 class EventStorage : public QObject
 {
@@ -64,6 +64,7 @@ signals:
 
 private:
     void addImages(const qlonglong &id, const QVariantMap &parameters);
+    void addMetaData(const qlonglong &id, const QVariantMap &parameters);
     static QDir dataDir();
     QString m_dbname;
     QSqlDatabase m_db;

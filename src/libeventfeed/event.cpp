@@ -32,77 +32,198 @@
 
 #include "event.h"
 
-Event::Event(const qlonglong &eid,
-             const QString &icon,
-             const QString &title,
-             const QString &body,
-             const QStringList &imageList,
-             const QString &timestamp,
-             const QString &footer,
-             const bool &video,
-             const QString &url,
-             const QString &sourceName,
-             const QString &sourceDisplayName)
-    : id(eid),
-      m_icon(icon),
-      m_title(title),
-      m_body(body),
-      m_imageList(imageList),
-      m_timestamp(timestamp),
-      m_footer(footer),
-      m_video(video),
-      m_url(url),
-      m_sourceName(sourceName),
-      m_sourceDisplayName(sourceDisplayName)
+Event::Event(QObject *parent) : QObject(parent)
 {
 }
 
-QString Event::icon() const
+Event::~Event()
 {
-    return m_icon;
 }
 
-QString Event::title() const
+void Event::setId(const qlonglong id)
 {
-    return m_title;
+    qlonglong oldId = id_;
+
+    id_ = id;
+
+    if (id_ != oldId) {
+        emit idChanged();
+    }
 }
 
-QString Event::body() const
+const qlonglong Event::id() const
 {
-    return m_body;
+    return id_;
 }
 
-QStringList Event::imageList() const
+void Event::setIcon(const QString &icon)
 {
-    return m_imageList;
+    QString oldIcon = icon_;
+
+    icon_ = icon;
+
+    if (icon_ != oldIcon) {
+        emit iconChanged();
+    }
 }
 
-QString Event::timestamp() const
+const QString& Event::icon() const
 {
-    return m_timestamp;
+    return icon_;
 }
 
-QString Event::footer() const
+void Event::setTitle(const QString &title)
 {
-    return m_footer;
+    QString oldTitle = title_;
+
+    title_ = title;
+
+    if (title_ != oldTitle) {
+        emit titleChanged();
+    }
 }
 
-bool Event::video() const
+const QString& Event::title() const
 {
-    return m_video;
+    return title_;
 }
 
-QString Event::url() const
+void Event::setBody(const QString &body)
 {
-    return m_url;
+    QString oldBody = body_;
+
+    body_ = body;
+
+    if (body_ != oldBody) {
+        emit bodyChanged();
+    }
 }
 
-QString Event::sourceName() const
+const QString& Event::body() const
 {
-    return m_sourceName;
+    return body_;
 }
 
-QString Event::sourceDisplayName() const
+void Event::setSourceName(const QString &sourceName)
 {
-    return m_sourceDisplayName;
+    QString oldSourceName = sourceName_;
+
+    sourceName_ = sourceName;
+
+    if (sourceName_ != oldSourceName) {
+        emit sourceNameChanged();
+    }
+}
+
+const QString& Event::sourceName() const
+{
+    return sourceName_;
+}
+
+void Event::setSourceDisplayName(const QString &sourceDisplayName)
+{
+    QString oldSourceDisplayName = sourceDisplayName_;
+
+    sourceDisplayName_ = sourceDisplayName;
+
+    if (sourceDisplayName_ != oldSourceDisplayName) {
+        emit sourceDisplayNameChanged();
+    }
+}
+
+const QString& Event::sourceDisplayName() const
+{
+    return sourceDisplayName_;
+}
+
+void Event::setImageList(const QStringList &list)
+{
+    imageList_ = list;
+
+    emit imageListChanged();
+}
+
+const QStringList& Event::imageList() const
+{
+    return imageList_;
+}
+
+void Event::setIsVideo(bool video)
+{
+    bool oldVideo = isVideo_;
+
+    isVideo_ = video;
+
+    if (isVideo_ != oldVideo) {
+        emit isVideoChanged();
+    }
+}
+
+bool Event::isVideo() const
+{
+    return isVideo_;
+}
+
+void Event::setTimestamp(const QDateTime &timestamp)
+{
+    QDateTime oldTimestamp = timestamp_;
+
+    timestamp_ = timestamp;
+
+    if (timestamp_ != oldTimestamp) {
+        emit timestampChanged();
+    }
+}
+
+const QDateTime& Event::timestamp() const
+{
+    return timestamp_;
+}
+
+void Event::setFooter(const QString &footer)
+{
+    QString oldFooter = footer_;
+
+    footer_ = footer;
+
+    if (footer_ != oldFooter) {
+        emit footerChanged();
+    }
+}
+
+const QString& Event::footer() const
+{
+    return footer_;
+}
+
+void Event::setUrl(const QString &url)
+{
+    QString oldUrl = url_;
+
+    url_ = url;
+
+    if (url_ != oldUrl) {
+        emit urlChanged();
+    }
+}
+
+const QString& Event::url() const
+{
+    return url_;
+}
+
+void Event::setMetaData(const QVariantMap &metaData)
+{
+    QVariantMap oldMetaData(metaData_);
+
+    metaData_ = metaData;
+
+    if (metaData_ != oldMetaData) {
+        emit metaDataChanged();
+    }
+}
+
+const QVariantMap& Event::metaData() const
+{
+    return metaData_;
 }

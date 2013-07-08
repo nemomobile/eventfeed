@@ -49,9 +49,9 @@ MEventFeed *MEventFeed::instance()
     return &eventFeedInstance;
 }
 
-qlonglong MEventFeed::addItem(const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName)
+qlonglong MEventFeed::addItem(const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName, const QVariantMap &metaData)
 {
-    QVariantMap parameters;
+    QVariantMap parameters(metaData);
     if (!icon.isEmpty()) {
         parameters.insert("icon", icon);
     }
@@ -85,9 +85,9 @@ qlonglong MEventFeed::addItem(const QString &icon, const QString &title, const Q
     return proxy.addItem(parameters);
 }
 
-void MEventFeed::updateItem(qlonglong id, const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName)
+void MEventFeed::updateItem(qlonglong id, const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName, const QVariantMap &metaData)
 {
-    QVariantMap parameters;
+    QVariantMap parameters(metaData);
     if (!icon.isEmpty()) {
         parameters.insert("icon", icon);
     }

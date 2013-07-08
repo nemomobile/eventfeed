@@ -78,9 +78,10 @@ public:
      * \param url the url to be executed when item is clicked. Executed action for URL is the default action provided by libcontentaction for the URL's scheme.
      * \param sourceName identifier for the event source e.g. application name, which should be persistent.
      * \param sourceDisplayName the source description in localized form which will be displayed in the UI in event feed item's object menu.
+     * \param metaData source specific meta data for the event feed item
      * \return unique id for the event feed item or -1 if values for the mandatory keys are not provided
      */
-    qlonglong addItem(const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName);
+    qlonglong addItem(const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName, const QVariantMap &metaData = QVariantMap());
 
     /*!
      * Updates an item in the event feed.
@@ -96,8 +97,9 @@ public:
      * \param url the url to be executed when item is clicked. Executed action for URL is the default action provided by libcontentaction for the URL's scheme.
      * \param sourceName identifier for the event source e.g. application name, which should be persistent.
      * \param sourceDisplayName the source description in localized form which will be displayed in the UI in event feed item's object menu.
+     * \param metaData source specific meta data for the event feed item
      */
-    void updateItem(qlonglong id, const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName);
+    void updateItem(qlonglong id, const QString &icon, const QString &title, const QString &body, const QStringList &imageList, const QDateTime &timestamp, const QString &footer, bool video, const QUrl &url, const QString &sourceName, const QString &sourceDisplayName, const QVariantMap &metaData = QVariantMap());
 
     /*!
      * Removes an item from the event feed.

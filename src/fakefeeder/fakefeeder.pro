@@ -18,7 +18,8 @@ HEADERS += \
     feeder.h
 
 INCLUDEPATH += ../libmeegotouchevents
-LIBS += -L../libmeegotouchevents -lmeegotouchevents$${DASH_QT_VERSION}
+QMAKE_LIBDIR = ../libmeegotouchevents
+LIBS = -lmeegotouchevents$${DASH_QT_VERSION}
 
 target.path = /usr/bin
 INSTALLS += target

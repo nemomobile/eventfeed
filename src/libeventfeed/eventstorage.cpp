@@ -111,6 +111,7 @@ qlonglong EventStorage::addItem(const QVariantMap &parameters)
 
     id = last_id.toLongLong();
     addImages(id, parameters);
+    addMetaData(id, parameters);
     m_db.commit();
 
     m_itemCount++;
@@ -148,6 +149,31 @@ void EventStorage::addImages(const qlonglong &id, const QVariantMap &parameters)
     }
 }
 
+void EventStorage::addMetaData(const qlonglong &id, const QVariantMap &parameters)
+{
+    QVariantMap metaData(parameters);
+    metaData.remove("id");
+    metaData.remove("icon");
+    metaData.remove("title");
+    metaData.remove("body");
+    metaData.remove("imageList");
+    metaData.remove("timestamp");
+    metaData.remove("footer");
+    metaData.remove("video");
+    metaData.remove("url");
+    metaData.remove("sourceName");
+    metaData.remove("sourceDisplayName");
+    QSqlQuery query(m_db);
+    foreach (const QString &key, metaData.keys()) {
+        query.prepare("INSERT INTO metadata (id, key, value) VALUES "
+                                         "(:id, :key, :value)");
+        query.bindValue(":id", id);
+        query.bindValue(":key", key);
+        query.bindValue(":value", metaData.value(key).toString());
+        query.exec();
+    }
+}
+
 QDir EventStorage::dataDir()
 {
     static const QDir xdgDataHome = QProcessEnvironment::systemEnvironment()
@@ -177,6 +203,7 @@ void EventStorage::updateItem(const qlonglong &id, const QVariantMap &parameters
             parameters["sourceDisplayName"].toString());
     query.exec();
     addImages(id, parameters);
+    addMetaData(id, parameters);
     m_db.commit();
 
     m_itemCount++;
@@ -218,7 +245,7 @@ const QList<qlonglong> EventStorage::removeItemsBySourceName(const QString &sour
 QList<Event *> EventStorage::getAllItems()
 {
     QList<Event *> events;
-    QSqlQuery query(m_db), query_img(m_db);
+    QSqlQuery query(m_db), query_img(m_db), query_metadata(m_db);
     query.exec("SELECT e.id, e.title, e.body, e.timestamp, e.footer, "
                       "e.url, e.sourceName, e.sourceDisplayName, "
                       "i.originalPath FROM events e "
@@ -236,19 +263,39 @@ QList<Event *> EventStorage::getAllItems()
         QString sourceDisplayName = query.value(7).toString();
         QString icon = query.value(8).toString();
 
-        query_img.prepare("SELECT originalPath FROM images "
+        query_img.prepare("SELECT originalPath, type FROM images "
                           "WHERE id = :id AND position >= 0 "
                           "ORDER BY position ASC");
         query_img.bindValue(":id", id);
         query_img.exec();
+        bool video = false;
         QStringList images;
         while (query_img.next()) {
             images.append(query_img.value(0).toString());
+            video |= query_img.value(1).toString() == "video";
         }
 
-        Event* event = new Event(id, icon, title, body, images,
-                                 timestamp, footer, false, url, sourceName,
-                                 sourceDisplayName);
+        query_metadata.prepare("SELECT * FROM metadata WHERE ID = :id");
+        query_metadata.bindValue(":id", id);
+        query_metadata.exec();
+        QVariantMap metaData;
+        while (query_metadata.next()) {
+            metaData.insert(query_metadata.value(1).toString(), query_metadata.value(2));
+        }
+
+        Event* event = new Event;
+        event->setId(id);
+        event->setIcon(icon);
+        event->setTitle(title);
+        event->setBody(body);
+        event->setImageList(images);
+        event->setTimestamp(QDateTime::fromString(timestamp, Qt::ISODate));
+        event->setFooter(footer);
+        event->setIsVideo(video);
+        event->setUrl(url);
+        event->setSourceName(sourceName);
+        event->setSourceDisplayName(sourceDisplayName);
+        event->setMetaData(metaData);
         events.append(event);
     }
     return events;
@@ -280,6 +327,11 @@ void EventStorage::reset()
                 "id INTEGER, position INTEGER, "
                 "originalPath TEXT, "
                 "type TEXT, PRIMARY KEY(id, position) "
+                "FOREIGN KEY(id) REFERENCES events(id) ON DELETE CASCADE)");
+    ret = ret && QSqlQuery(m_db).exec(
+            "CREATE TABLE metadata ("
+                "id INTEGER, key TEXT, "
+                "value TEXT, "
                 "FOREIGN KEY(id) REFERENCES events(id) ON DELETE CASCADE)");
     ret = ret && QSqlQuery(m_db).exec("PRAGMA user_version=" STR(DB_SCHEMA_VERSION));
     ret = ret && QSqlQuery(m_db).exec("PRAGMA foreign_keys = ON");

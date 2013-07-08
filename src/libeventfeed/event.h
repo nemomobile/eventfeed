@@ -35,46 +35,80 @@
 
 #include <QString>
 #include <QStringList>
+#include <QVariant>
+#include <QDateTime>
 
-class Event
+class Event : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString body READ body WRITE setBody NOTIFY bodyChanged)
+    Q_PROPERTY(QString footer READ footer WRITE setFooter NOTIFY footerChanged)
+    Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
+    Q_PROPERTY(QStringList imageList READ imageList WRITE setImageList NOTIFY imageListChanged)
+    Q_PROPERTY(bool isVideo READ isVideo WRITE setIsVideo NOTIFY isVideoChanged)
+    Q_PROPERTY(QDateTime timestamp READ timestamp WRITE setTimestamp NOTIFY timestampChanged)
+    Q_PROPERTY(QString sourceName READ sourceName WRITE setSourceName NOTIFY sourceNameChanged)
+    Q_PROPERTY(QString sourceDisplayName READ sourceDisplayName WRITE setSourceDisplayName NOTIFY sourceDisplayNameChanged)
+    Q_PROPERTY(QVariantMap metaData READ metaData WRITE setMetaData NOTIFY metaDataChanged)
+
 public:
-    Event(const qlonglong &eid,
-          const QString &icon,
-          const QString &title,
-          const QString &body,
-          const QStringList &imageList,
-          const QString &timestamp,
-          const QString &footer,
-          const bool &video,
-          const QString &url,
-          const QString &sourceName,
-          const QString &sourceDisplayName);
+    Event(QObject *parent = 0);
+    virtual ~Event();
 
-    const qlonglong id;
+    void setId(const qlonglong id);
+    const qlonglong id() const;
+    void setIcon(const QString& iconId);
+    const QString& icon() const;
+    void setTitle(const QString& name);
+    const QString& title() const;
+    void setBody(const QString& body);
+    const QString& body() const;
+    void setImageList(const QStringList& list);
+    const QStringList& imageList() const;
+    void setIsVideo(bool isVideo);
+    bool isVideo() const;
+    void setTimestamp(const QDateTime& timestamp);
+    const QDateTime& timestamp() const;
+    void setFooter(const QString& footer);
+    const QString& footer() const;
+    void setUrl(const QString &url);
+    const QString& url() const;
+    void setSourceName(const QString &sourceName);
+    const QString& sourceName() const;
+    void setSourceDisplayName(const QString &sourceDisplayName);
+    const QString& sourceDisplayName() const;
+    void setMetaData(const QVariantMap &metaData);
+    const QVariantMap& metaData() const;
 
-    QString icon() const;
-    QString title() const;
-    QString body() const;
-    QStringList imageList() const;
-    QString timestamp() const;
-    QString footer() const;
-    bool video() const;
-    QString url() const;
-    QString sourceName() const;
-    QString sourceDisplayName() const;
+signals:
+    void idChanged();
+    void iconChanged();
+    void titleChanged();
+    void bodyChanged();
+    void footerChanged();
+    void urlChanged();
+    void imageListChanged();
+    void timestampChanged();
+    void sourceNameChanged();
+    void sourceDisplayNameChanged();
+    void isVideoChanged();
+    void metaDataChanged();
 
 private:
-    const QString     m_icon;
-    const QString     m_title;
-    const QString     m_body;
-    const QStringList m_imageList;
-    const QString     m_timestamp;
-    const QString     m_footer;
-    const bool        m_video;
-    const QString     m_url;
-    const QString     m_sourceName;
-    const QString     m_sourceDisplayName;
+    qlonglong id_;
+    QString icon_;
+    QString title_;
+    QString body_;
+    QString footer_;
+    QStringList imageList_;
+    QDateTime timestamp_;
+    QString sourceName_;
+    QString sourceDisplayName_;
+    bool isVideo_;
+    QString url_;
+    QVariantMap metaData_;
 };
 
 #endif /* EVENT_H */

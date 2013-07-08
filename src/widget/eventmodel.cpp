@@ -96,7 +96,7 @@ QVariant EventModel::data(const QModelIndex &index, int role) const
     const Event *event = m_events[index.row()];
     switch (role) {
         case IdRole:
-            return event->id;
+            return event->id();
         case IconRole:
             return event->icon();
         case TitleRole:
@@ -110,7 +110,7 @@ QVariant EventModel::data(const QModelIndex &index, int role) const
         case FooterRole:
             return event->footer();
         case VideoRole:
-            return event->video();
+            return event->isVideo();
         case UrlRole:
             return event->url();
         case SourceNameRole:
@@ -123,17 +123,30 @@ QVariant EventModel::data(const QModelIndex &index, int role) const
 
 void EventModel::addEvent(const QVariantMap &ev)
 {
-    Event* event = new Event(ev["id"].toLongLong(),
-                             ev["icon"].toString(),
-                             ev["title"].toString(),
-                             ev["body"].toString(),
-                             ev["imageList"].toStringList(),
-                             ev["timestamp"].toString(),
-                             ev["footer"].toString(),
-                             ev["video"].toBool(),
-                             ev["url"].toString(),
-                             ev["sourceName"].toString(),
-                             ev["sourceDisplayName"].toString());
+    QVariantMap metaData(ev);
+    metaData.remove("id");
+    metaData.remove("icon");
+    metaData.remove("title");
+    metaData.remove("body");
+    metaData.remove("imageList");
+    metaData.remove("timestamp");
+    metaData.remove("footer");
+    metaData.remove("video");
+    metaData.remove("url");
+    metaData.remove("sourceName");
+    metaData.remove("sourceDisplayName");
+    Event* event = new Event;
+    event->setIcon(ev["icon"].toString());
+    event->setTitle(ev["title"].toString());
+    event->setBody(ev["body"].toString());
+    event->setImageList(ev["imageList"].toStringList());
+    event->setTimestamp(QDateTime::fromString(ev["timestamp"].toString(), Qt::ISODate));
+    event->setFooter(ev["footer"].toString());
+    event->setIsVideo(ev["video"].toBool());
+    event->setUrl(ev["url"].toString());
+    event->setSourceName(ev["sourceName"].toString());
+    event->setSourceDisplayName(ev["sourceDisplayName"].toString());
+    event->setMetaData(metaData);
     beginInsertRows(QModelIndex(), 0, 0);
     m_events.prepend(event);
     endInsertRows();
@@ -142,7 +155,7 @@ void EventModel::addEvent(const QVariantMap &ev)
 void EventModel::removeEvents(const QList<qlonglong> &ids)
 {
     for (int i = m_events.size() - 1; i >= 0; i--) {
-        if (ids.contains(m_events.at(i)->id)) {
+        if (ids.contains(m_events.at(i)->id())) {
             beginRemoveRows(QModelIndex(), i, i);
             delete m_events.at(i);
             m_events.removeAt(i);
