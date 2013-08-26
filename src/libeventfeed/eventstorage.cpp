@@ -35,7 +35,12 @@
 #include "eventstorage.h"
 
 static const QString DB_NAME = "events.data";
+#ifdef USE_PRIVILEGED_DATA_DIR
+#include <QStandardPaths>
+static const QString DATA_SUBDIR = "system/privileged/Events";
+#else
 static const QString DATA_SUBDIR = "eventfeed";
+#endif
 
 EventStorage::EventStorage(QObject *parent)
   : QObject(parent)
@@ -176,9 +181,14 @@ void EventStorage::addMetaData(const qlonglong &id, const QVariantMap &parameter
 
 QDir EventStorage::dataDir()
 {
+#ifdef USE_PRIVILEGED_DATA_DIR
+    static const QString privilegedLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QDir::separator() + DATA_SUBDIR;
+    static const QDir dataDir(privilegedLocation);
+#else
     static const QDir xdgDataHome = QProcessEnvironment::systemEnvironment()
         .value("XDG_DATA_HOME", QDir::home().filePath(".config"));
     static const QDir dataDir = xdgDataHome.filePath(DATA_SUBDIR);
+#endif
     return dataDir;
 }
 
