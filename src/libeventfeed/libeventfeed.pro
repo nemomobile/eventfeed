@@ -13,6 +13,8 @@ isEmpty(PREFIX) {
 TARGET = eventfeed$${DASH_QT_VERSION}
 target.path = $$INSTALL_ROOT$$PREFIX/lib
 
+DEFINES *= USE_PRIVILEGED_DATA_DIR
+
 HEADERS = eventstorage.h \
           event.h
 
