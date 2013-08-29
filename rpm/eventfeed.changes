@@ -1,3 +1,6 @@
+* Thu Aug 29 2013 Chris Adams <chris.adams@jollamobile.com> - 0.2.1
+- Use privileged data storage location by default
+
 * Mon Jul 04 2013 Vesa Halttunen <vesa.halttunen@jollamobile.com> - 0.2.0
 - Allow storing item specific meta data for event feed items
 
