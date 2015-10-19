@@ -1,2 +1,0 @@
-INCLUDEPATH += /usr/include/eventfeed-qt5
-LIBS += -leventfeed-qt5

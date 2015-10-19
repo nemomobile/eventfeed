@@ -1,8 +1,0 @@
-*.swp
-moc_*
-*.o
-*.so*
-Makefile
-*proxy.*
-*adaptor.*
-*.pro.user
